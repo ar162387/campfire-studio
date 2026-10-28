@@ -6,7 +6,7 @@ A browser-based animation studio **and an installable agent skill** for repeatab
 
 ## Run the studio
 
-Requires Node.js 22+ and npm. Python 3 is used by optional agent helpers; FFmpeg is needed for assembling speech.
+Requires Node.js 22+ and npm. Python 3 is used by optional agent helpers; FFmpeg/ffprobe are needed for audio assembly and offline video export.
 
 ```sh
 git clone https://github.com/ar162387/campfire-studio.git
@@ -49,7 +49,27 @@ Example prompt:
 - Local autosave, portable JSON with imported audio, browser recording targeting 1080×1920 at 30 fps.
 - Agent guides for extending characters, registering backgrounds, generating speech and assembling whole speaker turns without repeated words at cuts.
 
-New settings and character shapes are **code extensions using the same renderer**. The shipped scene is campfire; the editor does not currently have a template-picker UI. Timing edits move animation/captions, not the speech waveform. Recording smoothness and MP4/WebM support depend on your browser/device.
+New settings and character shapes are **code extensions using the same renderer**. The shipped scene is campfire; the editor does not currently have a template-picker UI. Timing edits move animation/captions, not the speech waveform. Interactive recording smoothness and MP4/WebM support depend on your browser/device; the offline exporter renders each frame independently.
+
+## Reliable video export for agents (including remote/headless workers)
+
+```sh
+npm run doctor -- examples/starter.episode.json
+npm run render -- episode.json --preview --output output/preview.mp4
+npm run render -- episode.json --output output/final.mp4
+```
+
+The exporter renders every frame locally using the existing scene engine. It produces native **1080×1920 at 30 fps**, mixes audio offline, verifies the MP4 and resumes completed frames after interruption. The user does not need to open the worker's localhost address. FFmpeg/ffprobe and the pinned Chrome browser are required; npm installs the browser unless downloads were explicitly skipped.
+
+CPU-only worker: add `--software` to doctor and render. It preserves output quality, with speed determined by the measured benchmark. Preview renders a short excerpt at native quality. A silent full performance check is included:
+
+```sh
+npm run render -- examples/performance-test.episode.json --silent --talk-preview
+```
+
+![Native offline-rendered frame](docs/offline-render.jpg)
+
+See the [rendering guide](skills/campfire-studio/references/rendering.md) for setup, diagnostics, audio, resumability, storage and Linux prerequisites.
 
 ## Voice workflow
 

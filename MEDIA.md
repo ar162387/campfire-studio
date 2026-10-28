@@ -5,3 +5,5 @@
 - `public/campfire-music.mp3`: original locally synthesised instrumental; no external samples.
 
 These stage assets are included with the source release under MIT. No generated speech, private production exports, reference reel or Instagram audio is bundled. Generate new voices through your own provider account and check its applicable usage terms. The geometry is procedural source code; no downloaded character-model pack is required.
+
+The exporter uses the open Inter font from @fontsource/inter, licensed under SIL OFL 1.1; see docs/INTER-LICENSE.txt. The font is not covered by the project MIT license.

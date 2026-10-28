@@ -1,0 +1,308 @@
+{
+  "version": 1,
+  "title": "Performance check \u2014 silent",
+  "templateId": "campfire",
+  "duration": 39,
+  "audioStatus": "pending",
+  "look": {
+    "skin": "#ce9362",
+    "shirt": "#66734a",
+    "hair": "#30241f",
+    "mascot": "#d7815d"
+  },
+  "mix": {
+    "dialogue": 1,
+    "fire": 0.2,
+    "night": 0.11,
+    "music": 0.12,
+    "duck": true
+  },
+  "beats": [
+    {
+      "id": 0,
+      "start": 0.0,
+      "end": 1.4,
+      "speaker": "human",
+      "text": "Idle. Neutral.",
+      "emotion": "neutral",
+      "action": "idle",
+      "camera": "Host",
+      "delivery": "natural"
+    },
+    {
+      "id": 1,
+      "start": 1.5,
+      "end": 2.9,
+      "speaker": "creature",
+      "text": "Idle. Neutral.",
+      "emotion": "neutral",
+      "action": "idle",
+      "camera": "Claude",
+      "delivery": "natural"
+    },
+    {
+      "id": 2,
+      "start": 3.0,
+      "end": 4.4,
+      "speaker": "human",
+      "text": "Talk. Happy.",
+      "emotion": "happy",
+      "action": "talk",
+      "camera": "Two-shot",
+      "delivery": "natural"
+    },
+    {
+      "id": 3,
+      "start": 4.5,
+      "end": 5.9,
+      "speaker": "creature",
+      "text": "Talk. Happy.",
+      "emotion": "happy",
+      "action": "talk",
+      "camera": "Wide",
+      "delivery": "natural"
+    },
+    {
+      "id": 4,
+      "start": 6.0,
+      "end": 7.4,
+      "speaker": "human",
+      "text": "Nod. Sad.",
+      "emotion": "sad",
+      "action": "nod",
+      "camera": "Over laptop",
+      "delivery": "natural"
+    },
+    {
+      "id": 5,
+      "start": 7.5,
+      "end": 8.9,
+      "speaker": "creature",
+      "text": "Nod. Sad.",
+      "emotion": "sad",
+      "action": "nod",
+      "camera": "Low angle",
+      "delivery": "natural"
+    },
+    {
+      "id": 6,
+      "start": 9.0,
+      "end": 10.4,
+      "speaker": "human",
+      "text": "Shake. Angry.",
+      "emotion": "angry",
+      "action": "shake",
+      "camera": "Host",
+      "delivery": "natural"
+    },
+    {
+      "id": 7,
+      "start": 10.5,
+      "end": 11.9,
+      "speaker": "creature",
+      "text": "Shake. Angry.",
+      "emotion": "angry",
+      "action": "shake",
+      "camera": "Claude",
+      "delivery": "natural"
+    },
+    {
+      "id": 8,
+      "start": 12.0,
+      "end": 13.4,
+      "speaker": "human",
+      "text": "Shrug. Surprised.",
+      "emotion": "surprised",
+      "action": "shrug",
+      "camera": "Two-shot",
+      "delivery": "natural"
+    },
+    {
+      "id": 9,
+      "start": 13.5,
+      "end": 14.9,
+      "speaker": "creature",
+      "text": "Shrug. Surprised.",
+      "emotion": "surprised",
+      "action": "shrug",
+      "camera": "Wide",
+      "delivery": "natural"
+    },
+    {
+      "id": 10,
+      "start": 15.0,
+      "end": 16.4,
+      "speaker": "human",
+      "text": "Wave. Thinking.",
+      "emotion": "thinking",
+      "action": "wave",
+      "camera": "Over laptop",
+      "delivery": "natural"
+    },
+    {
+      "id": 11,
+      "start": 16.5,
+      "end": 17.9,
+      "speaker": "creature",
+      "text": "Wave. Thinking.",
+      "emotion": "thinking",
+      "action": "wave",
+      "camera": "Low angle",
+      "delivery": "natural"
+    },
+    {
+      "id": 12,
+      "start": 18.0,
+      "end": 19.4,
+      "speaker": "human",
+      "text": "Point. Smug.",
+      "emotion": "smug",
+      "action": "point",
+      "camera": "Host",
+      "delivery": "natural"
+    },
+    {
+      "id": 13,
+      "start": 19.5,
+      "end": 20.9,
+      "speaker": "creature",
+      "text": "Point. Smug.",
+      "emotion": "smug",
+      "action": "point",
+      "camera": "Claude",
+      "delivery": "natural"
+    },
+    {
+      "id": 14,
+      "start": 21.0,
+      "end": 22.4,
+      "speaker": "human",
+      "text": "Type. Neutral.",
+      "emotion": "neutral",
+      "action": "type",
+      "camera": "Two-shot",
+      "delivery": "natural"
+    },
+    {
+      "id": 15,
+      "start": 22.5,
+      "end": 23.9,
+      "speaker": "creature",
+      "text": "Type. Neutral.",
+      "emotion": "neutral",
+      "action": "type",
+      "camera": "Wide",
+      "delivery": "natural"
+    },
+    {
+      "id": 16,
+      "start": 24.0,
+      "end": 25.4,
+      "speaker": "human",
+      "text": "Listen. Happy.",
+      "emotion": "happy",
+      "action": "listen",
+      "camera": "Over laptop",
+      "delivery": "natural"
+    },
+    {
+      "id": 17,
+      "start": 25.5,
+      "end": 26.9,
+      "speaker": "creature",
+      "text": "Listen. Happy.",
+      "emotion": "happy",
+      "action": "listen",
+      "camera": "Low angle",
+      "delivery": "natural"
+    },
+    {
+      "id": 18,
+      "start": 27.0,
+      "end": 28.4,
+      "speaker": "human",
+      "text": "Celebrate. Sad.",
+      "emotion": "sad",
+      "action": "celebrate",
+      "camera": "Host",
+      "delivery": "natural"
+    },
+    {
+      "id": 19,
+      "start": 28.5,
+      "end": 29.9,
+      "speaker": "creature",
+      "text": "Celebrate. Sad.",
+      "emotion": "sad",
+      "action": "celebrate",
+      "camera": "Claude",
+      "delivery": "natural"
+    },
+    {
+      "id": 20,
+      "start": 30.0,
+      "end": 31.4,
+      "speaker": "human",
+      "text": "Facepalm. Angry.",
+      "emotion": "angry",
+      "action": "facepalm",
+      "camera": "Two-shot",
+      "delivery": "natural"
+    },
+    {
+      "id": 21,
+      "start": 31.5,
+      "end": 32.9,
+      "speaker": "creature",
+      "text": "Facepalm. Angry.",
+      "emotion": "angry",
+      "action": "facepalm",
+      "camera": "Wide",
+      "delivery": "natural"
+    },
+    {
+      "id": 22,
+      "start": 33.0,
+      "end": 34.4,
+      "speaker": "human",
+      "text": "Lean. Surprised.",
+      "emotion": "surprised",
+      "action": "lean",
+      "camera": "Over laptop",
+      "delivery": "natural"
+    },
+    {
+      "id": 23,
+      "start": 34.5,
+      "end": 35.9,
+      "speaker": "creature",
+      "text": "Lean. Surprised.",
+      "emotion": "surprised",
+      "action": "lean",
+      "camera": "Low angle",
+      "delivery": "natural"
+    },
+    {
+      "id": 24,
+      "start": 36.0,
+      "end": 37.4,
+      "speaker": "human",
+      "text": "Bounce. Thinking.",
+      "emotion": "thinking",
+      "action": "bounce",
+      "camera": "Host",
+      "delivery": "natural"
+    },
+    {
+      "id": 25,
+      "start": 37.5,
+      "end": 38.9,
+      "speaker": "creature",
+      "text": "Bounce. Thinking.",
+      "emotion": "thinking",
+      "action": "bounce",
+      "camera": "Claude",
+      "delivery": "natural"
+    }
+  ]
+}
