@@ -12,7 +12,7 @@
     "build": "node tools/build.mjs",
     "start": "node tools/serve.mjs",
     "typecheck": "tsc --noEmit",
-    "test": "node --test tests/*.test.mjs",
+    "test": "node tools/build-data.mjs && node --test tests/*.test.mjs",
     "doctor": "node tools/render.mjs --doctor",
     "render": "node tools/render.mjs"
   },

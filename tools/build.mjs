@@ -2,7 +2,7 @@ import {build} from 'esbuild';
 import {cp,mkdir,copyFile} from 'node:fs/promises';
 await mkdir('dist',{recursive:true});
 await build({entryPoints:['src/puppet/Studio.tsx'],outfile:'dist/studio.js',bundle:true,minify:true,format:'iife',platform:'browser',jsx:'automatic',define:{'process.env.NODE_ENV':'"production"'}});
-await build({entryPoints:['tools/render-data.ts'],outfile:'dist/render-data.mjs',bundle:true,minify:true,format:'esm',platform:'node'});
+await import('./build-data.mjs');
 await cp('public','dist',{recursive:true});
 await build({entryPoints:['src/puppet/Offline.tsx'],outfile:'dist/render.js',bundle:true,minify:true,format:'iife',platform:'browser',jsx:'automatic',define:{'process.env.NODE_ENV':'"production"'}});
 await copyFile('node_modules/@fontsource/inter/files/inter-latin-700-normal.woff2','dist/inter-latin-700-normal.woff2');
