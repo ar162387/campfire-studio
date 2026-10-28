@@ -33,7 +33,7 @@ python3 tools/install-skill.py --agent generic
 
 The installer copies `skills/campfire-studio` to `~/.codex/skills`, `~/.claude/skills` or `~/.agents/skills`. Use `--destination /your/skills/folder` for another agent. It refuses to overwrite an existing skill unless explicitly passed `--force`. Restart/reload your agent if needed.
 
-For agents without skill discovery, point them directly to [SKILL.md](skills/campfire-studio/SKILL.md) and [AGENTS.md](AGENTS.md). All instructions are ordinary Markdown. The installed skill can locate or clone this studio via its `scripts/ensure-studio.py`; set `CAMPFIRE_STUDIO_HOME` to reuse an existing checkout.
+For agents without skill discovery, point them directly to [SKILL.md](skills/campfire-studio/SKILL.md) and [AGENTS.md](AGENTS.md). All instructions are ordinary Markdown. The installer remembers this checkout locally, so the installed skill reuses it automatically. Its `scripts/ensure-studio.py` clones a fresh copy only if no valid checkout is known. `CAMPFIRE_STUDIO_HOME` overrides the remembered location.
 
 Example prompt:
 

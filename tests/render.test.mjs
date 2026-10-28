@@ -2,7 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {mkdtemp,rm,readFile,writeFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
-import {join} from 'node:path';
+import {join,resolve} from 'node:path';
+import {spawnSync} from 'node:child_process';
 import {validateProject,renderRange,acquireJob,checkOutput,hash,validFrame} from '../tools/render-core.mjs';
 import {activeIntervals,intervalExpression,prepareAudio,mixAudio,gainCurve} from '../tools/render-audio.mjs';
 const project=JSON.parse(await readFile('examples/starter.episode.json','utf8'));
@@ -15,3 +16,5 @@ test('silent mode never tries to load absent private audio assets',async()=>{con
 test('offline ambience/action mixing produces a real trimmed audio file',async()=>{const folder=await mkdtemp(join(tmpdir(),'campfire-mix-test-'));try{const a=await prepareAudio({...project,beats:project.beats.map(b=>({...b,action:'type'}))},process.cwd(),folder);const file=await mixAudio(a,project,{start:.5,duration:.2},folder);assert((await readFile(file)).length>10000);assert.equal(hash('same'),hash('same'));}finally{await rm(folder,{recursive:true,force:true});}});
 
 test('gain curves smoothly gate typing and duck music under speech',()=>{const p={duration:2,beats:[{start:0,end:.5,action:'type'}]},a={mix:{duck:true},envelope:Array(60).fill(0)};const typing=gainCurve({kind:'action',action:'type',volume:1},p,a);assert(typing.readFloatLE(Math.round(.4*48000)*4)>.1);assert(typing.readFloatLE(Math.round(1.9*48000)*4)<.01);const music={kind:'music',volume:1},normal=gainCurve(music,p,a),ducked=gainCurve(music,p,{...a,envelope:Array(60).fill(.5)});assert(ducked.readFloatLE(48000*4)<normal.readFloatLE(48000*4));});
+
+test('installed skill reuses its registered checkout without an environment variable',async()=>{const folder=await mkdtemp(join(tmpdir(),'campfire-install-test-'));try{const env={...process.env};delete env.CAMPFIRE_STUDIO_HOME;const installed=spawnSync('python3',['tools/install-skill.py','--destination',folder],{encoding:'utf8',env});assert.equal(installed.status,0,installed.stderr);const located=spawnSync('python3',[join(folder,'campfire-studio/scripts/ensure-studio.py')],{encoding:'utf8',env});assert.equal(located.status,0,located.stderr);assert.equal(located.stdout.trim(),resolve('.'));const again=spawnSync('python3',['tools/install-skill.py','--destination',folder],{encoding:'utf8',env});assert.notEqual(again.status,0);}finally{await rm(folder,{recursive:true,force:true});}});

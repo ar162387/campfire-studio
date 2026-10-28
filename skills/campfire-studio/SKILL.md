@@ -9,7 +9,7 @@ Use the existing React/Three.js studio. Do not replace it with a new renderer, s
 
 ## Find the engine
 
-Run `python3 scripts/ensure-studio.py` relative to this skill. In the repository it locates the checkout; after installation elsewhere it clones `https://github.com/ar162387/campfire-studio` into `~/.local/share/campfire-studio`. `CAMPFIRE_STUDIO_HOME` selects another checkout. `--install` runs the locked dependency install and build. Requirements: Node 22+, npm, Python 3 and Git. FFmpeg/ffprobe are needed for voice assembly and offline video export.
+Run `python3 scripts/ensure-studio.py` relative to this skill. In the repository it locates the checkout; an installed copy first reuses the location recorded by the installer. If no valid checkout is known it clones `https://github.com/ar162387/campfire-studio` into `~/.local/share/campfire-studio`. `CAMPFIRE_STUDIO_HOME` selects another checkout. `--install` runs the locked dependency install and build. Requirements: Node 22+, npm, Python 3 and Git. FFmpeg/ffprobe are needed for voice assembly and offline video export.
 
 Read the checkout's `AGENTS.md`. Run `npm ci`, `npm run build`, then `npm start`. Use the actual printed localhost URL; `PORT` selects a free port. The supplied episode is silent on purpose until matching dialogue is imported.
 
