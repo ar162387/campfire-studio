@@ -14,6 +14,8 @@ Node 22+, FFmpeg and ffprobe are required. npm installs a pinned Puppeteer brows
 
 If browser download was skipped, run `npx puppeteer browsers install chrome`, or pass `--browser /path/to/chrome` (also `PUPPETEER_EXECUTABLE_PATH`). Installed browser overrides may change the rendering environment and consequently the resume fingerprint. On Linux, Chrome also needs its normal system libraries and a working sandbox; use a non-root worker. Do not disable system security globally to make a renderer launch.
 
+On Linux, the exporter prefers an existing `/opt/google/chrome/chrome` installation when present, so it can use the OS's existing browser sandbox profile. Recent Ubuntu AppArmor policies can block a downloaded Chrome for Testing binary; see [Puppeteer troubleshooting](https://pptr.dev/troubleshooting#issues-with-apparmor-on-ubuntu). An explicit `--browser` or `PUPPETEER_EXECUTABLE_PATH` takes priority. `CAMPFIRE_BROWSER_DEBUG=1` includes browser launch diagnostics. The exporter never automatically disables Chrome's sandbox.
+
 ## Measure before promising an ETA
 
 Doctor actually loads the registered scene, font and native-size WebGL canvas, then renders several different episode frames locally. Its report includes the renderer string, CPU count, measured seconds/frame, estimated frame storage and free disk space. It estimates frame time separately from encoding; a short sample is an estimate, not a guaranteed finish time.

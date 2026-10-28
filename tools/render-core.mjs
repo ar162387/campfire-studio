@@ -39,11 +39,17 @@ export async function startRenderer(dist,{software=false,browserPath}={}){
  await new Promise((yes,no)=>{server.once('error',no);server.listen(0,'127.0.0.1',yes);});let browser;
  try{
   const args=['--enable-webgl','--enable-gpu','--hide-scrollbars','--force-color-profile=srgb'];if(software)args.push('--use-angle=swiftshader','--enable-unsafe-swiftshader');
-  browser=await puppeteer.launch({headless:true,pipe:true,timeout:30000,protocolTimeout:120000,executablePath:browserPath||process.env.PUPPETEER_EXECUTABLE_PATH||undefined,args});
+  let executable=browserPath||process.env.PUPPETEER_EXECUTABLE_PATH;
+  // Recent Ubuntu AppArmor policies already authorise the installed stable Chrome.
+  // Reuse that sandboxed browser rather than disabling host/browser protections.
+  if(!executable&&process.platform==='linux'&&await exists('/opt/google/chrome/chrome'))executable='/opt/google/chrome/chrome';
+  executable??=puppeteer.executablePath();
+  await command(executable,['--version']);
+  browser=await puppeteer.launch({headless:true,pipe:true,timeout:30000,protocolTimeout:120000,executablePath:executable,dumpio:process.env.CAMPFIRE_BROWSER_DEBUG==='1',args});
   const page=await browser.newPage();await page.setViewport({width:WIDTH,height:HEIGHT,deviceScaleFactor:1});const errors=[];page.on('pageerror',e=>errors.push(String(e)));
   await page.goto(`http://127.0.0.1:${server.address().port}/render.html`,{waitUntil:'domcontentloaded',timeout:30000});await page.waitForFunction(()=>window.CampfireRenderer?.ready,{timeout:30000,polling:100});
   return {browser,page,errors,async close(){await browser.close();await new Promise(yes=>server.close(yes));}};
- }catch(e){if(browser)await browser.close();await new Promise(yes=>server.close(yes));throw Error(`Offline browser failed: ${e.message}\nLinux containers need Chrome system libraries and a working browser sandbox; use a non-root render worker. --software explicitly selects SwiftShader for trusted local scene rendering when no GPU is available.`);}
+ }catch(e){if(browser)await browser.close();await new Promise(yes=>server.close(yes));throw Error(`Offline browser failed: ${e.message}\nCheck browser installation (npm exec puppeteer browsers install chrome). Set CAMPFIRE_BROWSER_DEBUG=1 for browser diagnostics. Linux containers need Chrome system libraries and a working browser sandbox; use a non-root render worker. --software explicitly selects SwiftShader for trusted local scene rendering when no GPU is available.`);}
 }
 export function strippedProject(project){const {media,...p}=project;return p;}
 async function evaluateRenderer(renderer,callback,arg){
