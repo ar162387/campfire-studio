@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "title": "A small idea, brought to life",
+  "templateId": "campfire",
+  "duration": 12,
+  "audioStatus": "pending",
+  "look": {
+    "skin": "#ce9362",
+    "shirt": "#66734a",
+    "hair": "#30241f",
+    "mascot": "#d7815d"
+  },
+  "mix": {
+    "dialogue": 1,
+    "fire": 0.2,
+    "night": 0.11,
+    "music": 0.12,
+    "duck": true
+  },
+  "beats": [
+    {
+      "id": 0,
+      "start": 0,
+      "end": 2.7,
+      "speaker": "human",
+      "text": "Can we turn this idea into a story?",
+      "emotion": "thinking",
+      "action": "talk",
+      "camera": "Host",
+      "delivery": "curious"
+    },
+    {
+      "id": 1,
+      "start": 3,
+      "end": 5.7,
+      "speaker": "creature",
+      "text": "Start with a problem someone recognises.",
+      "emotion": "happy",
+      "action": "nod",
+      "camera": "Claude",
+      "delivery": "warmly"
+    },
+    {
+      "id": 2,
+      "start": 6,
+      "end": 8.7,
+      "speaker": "human",
+      "text": "And give it a little personality.",
+      "emotion": "happy",
+      "action": "point",
+      "camera": "Two-shot",
+      "delivery": "curious"
+    },
+    {
+      "id": 3,
+      "start": 9,
+      "end": 11.7,
+      "speaker": "creature",
+      "text": "Now we have something to work with.",
+      "emotion": "smug",
+      "action": "talk",
+      "camera": "Claude",
+      "delivery": "warmly"
+    }
+  ]
+}

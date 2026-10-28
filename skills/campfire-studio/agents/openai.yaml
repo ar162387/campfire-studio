@@ -1,0 +1,4 @@
+interface:
+  display_name: "Campfire Studio"
+  short_description: "Create reusable animated dialogue reels"
+  default_prompt: "Use $campfire-studio to create or edit a reel with reusable characters, scenes, captions and voices."
