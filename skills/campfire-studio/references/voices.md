@@ -27,7 +27,7 @@ For new generated sound, ask the chosen sound-effect tool for a subtle loop suit
 
 ## Ordered scene dialogue and alignment (v2)
 
-`tools/voice-scene.py` adds a scene-level Text to Dialogue path. It preserves input order and explicitly selects `model_id`. Discover currently available models and voices, audition alternatives, then lock cast IDs. Never silently change a user's chosen voice or model. The included Will/Roger IDs were discovered previously; another account must verify them. Model pricing is not hardcoded and no fixed per-reel cost is promised.
+`tools/voice-scene.py` adds a scene-level Text to Dialogue path. It preserves input order and explicitly selects `model_id`. Discover currently available models and voices, then lock cast IDs. Paid auditions require separate authorization. Never silently change a user's chosen voice or model. The included Will/Roger IDs were discovered previously; another account must verify them. Model pricing is not hardcoded and no fixed per-reel cost is promised.
 
 ```sh
 # Offline request preparation, no key or credits:
@@ -72,3 +72,19 @@ npm run voice:dialogue -- assemble episode.json --out output/take --model eleven
 The generation cap defaults to 500 input characters, including delivery tags. Raising it is deliberate and still requires authorization for the take. SDK retries are disabled. Existing response directories cannot be silently regenerated. `--align-fallback` must be selected explicitly and requires credit authorization; otherwise invalid timing stops with the saved take intact. Never run a paid onboarding sample or fresh audition merely to check that setup works. Use discovery, saved takes and offline fixtures for routine checks. Respect a user's credit reserve and any request to stop billable testing.
 
 `examples/voice-validation.episode.json` is an original engineering test, not a social post or customer case study. Its speech is not bundled in the public repository. The existing Python preparation/assembly path remains available without the SDK.
+
+## Contextual performance direction
+
+Keep caption text plain. A beat may store `voiceDirection` with one primary `emotion`, an optional `vocalization: {tag, after?}`, an optional `delivery`, and an optional `character`. Values are plain cues without brackets; the compiler adds brackets. `after` must uniquely match text in the line and inserts the vocalization there. Both the editor voice recipe and CLI use this structure.
+
+Hand-direct from the story context. A sigh, exhale or chuckle should earn its place. Reserve delivery changes such as softly or voice breaking for a sincere beat or button. Character cues are for deliberate imitations or special episodes, never a substitute for casting. Keep sound effects in separate scene layers; dialogue cues reject effects such as phone ringing. Automated tagging is a draft aid only.
+
+Generate one authorized production take. Do not interpret a creative brief's suggestion to compare takes as permission to spend on repeated generations when the user is conserving credits. Reuse the saved response for all timing and picture work.
+
+### Deliberate screen pauses
+
+An empty-text beat is silent and excluded from the speech request. During local assembly, if the provider leaves too little time for that beat, the assembler inserts only the missing silence in decoded PCM, shifts the measured character/voice timing, and embeds `dialogue-timed.wav`. The original response and MP3 remain intact. The timing report records every inserted interval. This spends no additional credits and does not stretch speech.
+
+`screen.fullFrame: true` creates a shared preview/export screen card. `screen.playback` and `playbackDuration` animate its waveform; they do not imply an actual generated recording or sound. Put the visible title, lines and timestamp in the screen event. An optional project `endCard: {text, duration}` uses the final duration interval; include that duration in the project length. Voice assembly adds it after the audio and ending hold.
+
+Publishing cover metadata supports `coverBeatId`, `coverAccent`, `coverNote` and `coverQuote` under `series`. Keep private episode claims and production media in ignored output folders.

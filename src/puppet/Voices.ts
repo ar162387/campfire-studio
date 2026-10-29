@@ -1,3 +1,4 @@
+import {directedSpeech} from './SpeechDirection';
 import type {Beat, Project} from './types';
 
 // IDs were retrieved from the connected ElevenLabs voice library.
@@ -7,6 +8,7 @@ export const VOICE_CAST = {
 };
 export const DELIVERY = ['natural','curious','surprised','sarcastic','confident','tired','amused','softly','excited','sighs'] as const;
 export function deliveryFor(beat:Beat):string {
+ if(beat.voiceDirection)return beat.voiceDirection.emotion;
  if(beat.delivery!==undefined)return beat.delivery;
  if(beat.emotion==='smug')return 'sarcastic';
  if(beat.emotion==='surprised')return 'surprised';
@@ -18,7 +20,7 @@ export function deliveryFor(beat:Beat):string {
 }
 export function voiceRecipe(project:Project){
  return {version:1,title:project.title,model:'eleven_v4',cast:project.voices??VOICE_CAST,
- lines:[...project.beats].sort((a,b)=>a.start-b.start).map(b=>({id:b.id,speaker:b.speaker,text:b.text,delivery:deliveryFor(b),prompt:(deliveryFor(b)==='natural'?'':`[${deliveryFor(b)}] `)+b.text}))};
+ lines:[...project.beats].sort((a,b)=>a.start-b.start).map(b=>({id:b.id,speaker:b.speaker,text:b.text,delivery:deliveryFor(b),voiceDirection:b.voiceDirection,prompt:directedSpeech({...b,delivery:deliveryFor(b)})}))};
 }
 export type VoicePackage={version:1;revision?:string;duration:number;audio:string;lines:{id:number;text:string;start:number;end:number;words?:{text:string;start:number;end:number}[]}[]};
 export function applyVoiceTiming(project:Project,pack:VoicePackage):Project{

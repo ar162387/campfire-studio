@@ -12,6 +12,7 @@ export function validateProject(p,models){
  if(p?.version!==1||!p.look||!Number.isFinite(p.duration)||p.duration<=0||!Array.isArray(p.beats)||!p.beats.length)throw Error('Expected a version-1 Campfire episode with look, duration and beats.');
  if(models?.SCENE_TEMPLATES&&!models.SCENE_TEMPLATES[p.templateId??'campfire'])throw Error('Unknown scene template');
  if(p.endingHold!==undefined&&(!Number.isFinite(p.endingHold)||p.endingHold<0||p.endingHold>3))throw Error('Invalid ending hold');
+ if(p.endCard&&(!p.endCard.text?.trim()||!Number.isFinite(p.endCard.duration)||p.endCard.duration<=0||p.endCard.duration>10))throw Error('Invalid end card');
  if(p.captionStyle&&(!['chunks','karaoke'].includes(p.captionStyle.mode)||p.captionStyle.maxWords!==undefined&&(!Number.isInteger(p.captionStyle.maxWords)||p.captionStyle.maxWords<1||p.captionStyle.maxWords>8)))throw Error('Invalid caption style');
  if(models?.validCamera&&p.cameraPresets?.some(c=>!models.validCamera(c)))throw Error('Invalid saved camera');
  const ids=new Set();let end=0;

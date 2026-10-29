@@ -7,3 +7,5 @@ export {reviewStory} from '../src/puppet/Story';
 export {SCENE_TEMPLATES} from '../src/puppet/SceneTemplates';
 export {CAMERA_POSES,validCamera} from '../src/puppet/CameraRig';
 export {DRESSING_PLAN,dressingLayout} from '../src/puppet/SetDressing';
+
+export {directedSpeech} from '../src/puppet/SpeechDirection';

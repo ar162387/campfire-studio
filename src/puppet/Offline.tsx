@@ -5,6 +5,7 @@ import {CharacterWorld} from './World';
 import {direct,type Project} from './types';
 import {heldPerformanceFrame,screenAt,beatPhase} from './Direction';
 import {paintCaptions} from './Captions';
+import {paintSceneCards} from './SceneCards';
 import {SCENE_TEMPLATES} from './SceneTemplates';
 
 type Configuration={project:Project;envelope:number[];captions:boolean;talkPreview:boolean};
@@ -20,6 +21,7 @@ function CommitFrame({request}:{request:Request}){
   context!.clearRect(0,0,1080,1920);context!.drawImage(gl.domElement,0,0,1080,1920);
   const captionFrame=heldPerformanceFrame(request.frame,request.project),beat=direct(captionFrame,request.project.beats,0).beat;
   if(request.captions&&beat)paintCaptions(context!,beat,captionFrame/30,'Campfire Sans',request.project.captionStyle);
+  paintSceneCards(context!,request.project,request.frame/30);
   request.resolve();
  }catch(e){request.reject(e instanceof Error?e:Error(String(e)));}},[request,gl,scene,camera]);
  return null;

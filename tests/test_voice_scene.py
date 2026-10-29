@@ -1,4 +1,4 @@
-import importlib.util,unittest
+import importlib.util,unittest,tempfile,wave,copy
 from pathlib import Path
 spec=importlib.util.spec_from_file_location('voice_scene',Path('tools/voice-scene.py'));v=importlib.util.module_from_spec(spec);spec.loader.exec_module(v)
 class VoiceSceneTests(unittest.TestCase):
@@ -20,4 +20,21 @@ class VoiceSceneTests(unittest.TestCase):
   with self.assertRaisesRegex(ValueError,'2000'):v.prepare(e,'eleven_v4')
   e['beats'][0]['text']='[happy] Hello'
   with self.assertRaisesRegex(ValueError,'Captions'):v.prepare(e,'eleven_v4')
+ def test_contextual_voice_direction(self):
+  b={'text':'Fine. Keep it.','voiceDirection':{'emotion':'resigned','delivery':'softly','vocalization':{'tag':'sighs','after':'Fine.'}}}
+  self.assertEqual(v.voice_text(b,{}),'[resigned] [softly] Fine. [sighs] Keep it.')
+  b['voiceDirection']['vocalization']['tag']='phone ringing'
+  with self.assertRaises(ValueError):v.voice_text(b,{})
+ def test_silence_is_local_and_shifts_measured_timing(self):
+  e=self.episode();e['beats'][0]['text']='Hi';e['beats'][1]['text']='Bye';e['beats'][1].update(start=3,end=4)
+  e['beats'].insert(1,{'id':3,'start':1,'end':2.5,'speaker':'human','text':''})
+  text='Hi Bye';a={'characters':list(text),'character_start_times_seconds':[0,.1,.2,.3,.4,.5],'character_end_times_seconds':[.1,.2,.3,.4,.5,.6]};response={'alignment':a};original=copy.deepcopy(response)
+  with tempfile.TemporaryDirectory() as td:
+   folder=Path(td);audio=folder/'input.wav'
+   with wave.open(str(audio),'wb') as f:f.setparams((2,2,48000,0,'NONE','not compressed'));f.writeframes(bytes(48000*4))
+   shifted,duration,timed,edits=v.insert_silent_beats(e,v.prepare(e,'eleven_v4'),response,1,audio,folder)
+   self.assertEqual(response,original);self.assertAlmostEqual(edits[0]['duration'],1.4);self.assertAlmostEqual(duration,2.4)
+   final=v.retime(e,v.prepare(e,'eleven_v4'),shifted,duration)
+   pause=next(b for b in final['beats'] if b['id']==3);self.assertAlmostEqual(pause['end']-pause['start'],1.5)
+   with wave.open(str(timed),'rb') as f:self.assertEqual(f.getnframes(),115200)
 if __name__=='__main__':unittest.main()

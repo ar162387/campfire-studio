@@ -3,7 +3,7 @@
 prepare is offline. generate calls ElevenLabs exactly once (no charged POST retries).
 An existing response can be assembled again without regenerating speech.
 """
-import argparse,base64,json,os,re,subprocess,sys,urllib.request,urllib.error
+import argparse,base64,copy,json,os,re,subprocess,sys,urllib.request,urllib.error,wave
 from pathlib import Path
 
 DEFAULT_CAST={'human':{'voiceId':'bIHbv24MWmeRgasZH58o','name':'Will'},'creature':{'voiceId':'CwhRBWXzGAHq8TQ4Fs17','name':'Roger'}}
@@ -12,6 +12,28 @@ def speak(text,aliases):
     for written,spoken in sorted(aliases.items(),key=lambda x:-len(x[0])):
         text=re.sub(r'(?<!\w)'+re.escape(written)+r'(?!\w)',lambda _:spoken,text,flags=re.I)
     return text
+
+def voice_text(beat,aliases):
+    direction=beat.get('voiceDirection')
+    if not direction:
+        cue=beat.get('delivery','natural')
+        if any(x in cue for x in '[]\r\n'):raise ValueError('Delivery is a cue without brackets or newlines.')
+        return f"[{cue}] {speak(beat['text'],aliases)}"
+    def tag(value):
+        if not isinstance(value,str) or not re.fullmatch(r'[a-zA-Z][a-zA-Z -]*',value):raise ValueError('Use one plain cue per voice category, without brackets.')
+        if re.search(r'phone|ringing|gunshot|explosion|music|alarm|sound effect',value,re.I):raise ValueError('Sound effects belong to separate scene clips, not dialogue tags.')
+        return '['+value+']'
+    lead=[tag(direction['emotion'])];text=beat['text']
+    for field in ['character','delivery']:
+        if direction.get(field):lead.append(tag(direction[field]))
+    vocal=direction.get('vocalization')
+    if vocal:
+        cue=tag(vocal['tag']);anchor=vocal.get('after')
+        if anchor:
+            if text.count(anchor)!=1:raise ValueError('Vocalization anchor must occur exactly once in the spoken line.')
+            end=text.index(anchor)+len(anchor);text=text[:end]+' '+cue+text[end:]
+        else:lead.append(cue)
+    return ' '.join(lead)+' '+speak(text,aliases)
 
 def prepare(episode,model,aliases=None):
     aliases=aliases or {}
@@ -23,9 +45,8 @@ def prepare(episode,model,aliases=None):
     for b in beats:
         if not b['text'].strip():continue
         if re.search(r'\[[^]]*\]',b['text']):raise ValueError('Captions must contain spoken words only; move bracket tags to delivery.')
-        cue=b.get('delivery','natural')
-        if any(x in cue for x in '[]\r\n'):raise ValueError('Delivery is a cue without brackets or newlines.')
-        text=f"[{cue}] {speak(b['text'],aliases)}"
+        text=voice_text(b,aliases)
+        cue=b.get('voiceDirection',{}).get('emotion',b.get('delivery','natural'))
         inputs.append({'text':text,'voice_id':cast[b['speaker']]['voiceId']})
         mapping.append({'beatId':b['id'],'caption':b['text'],'spoken':speak(b['text'],aliases),'delivery':cue})
     if sum(len(x['text']) for x in inputs)>2000:raise ValueError('Scene exceeds the provider’s 2000-character input limit; split at a complete turn.')
@@ -91,10 +112,36 @@ def retime(episode,manifest,response,duration):
         if end-begin+1e-3<b['end']-b['start']:raise ValueError('Generated scene does not leave the scripted silence. Use the whole-turn assembler to place this pause deliberately.')
         beats.append({**b,'start':begin,'end':begin+b['end']-b['start']})
     beats.sort(key=lambda b:b['start'])
-    out=dict(episode);out.update(beats=beats,duration=duration+episode.get('endingHold',1.2),audioStatus=None)
+    out=dict(episode);out.update(beats=beats,duration=duration+episode.get('endingHold',1.2)+episode.get('endCard',{}).get('duration',0),audioStatus=None)
     # Events attached to lines already follow their new starts. Independent absolute events require explicit retiming.
     if episode.get('screenEvents'):raise ValueError('Retiming independent screenEvents needs manual review. Attach them to beats before replacing speech.')
     return out
+
+def insert_silent_beats(episode,manifest,response,duration,audio,outdir):
+    silent=[b for b in episode['beats'] if not b['text'].strip()]
+    if not silent:return response,duration,audio,[]
+    spoken={**episode,'beats':[b for b in episode['beats'] if b['text'].strip()]}
+    measured=retime(spoken,manifest,response,duration)['beats'];original={b['id']:b for b in episode['beats']};edits=[]
+    for beat in sorted(silent,key=lambda b:b['start']):
+        before=[b for b in measured if original[b['id']]['start']<beat['start']];after=[b for b in measured if original[b['id']]['start']>beat['start']]
+        left=max((b['end'] for b in before),default=0);right=min((b['start'] for b in after),default=duration);needed=beat['end']-beat['start']-(right-left)
+        if needed>.001:edits.append({'beatId':beat['id'],'sourceTime':(left+right)/2,'duration':round(needed*48000)/48000})
+    if not edits:return response,duration,audio,[]
+    decoded=outdir/'source-decoded.wav';subprocess.run(['ffmpeg','-v','error','-y','-i',str(audio),'-ar','48000','-ac','2','-c:a','pcm_s16le',str(decoded)],check=True)
+    with wave.open(str(decoded),'rb') as f:params=f.getparams();raw=f.readframes(f.getnframes())
+    pieces=[];cursor=0;frame_size=params.nchannels*params.sampwidth
+    for edit in sorted(edits,key=lambda e:e['sourceTime']):
+        at=round(edit['sourceTime']*params.framerate)*frame_size;pieces.extend([raw[cursor:at],bytes(round(edit['duration']*params.framerate)*frame_size)]);cursor=at
+    pieces.append(raw[cursor:]);timed=outdir/'dialogue-timed.wav'
+    with wave.open(str(timed),'wb') as f:f.setparams(params);f.writeframes(b''.join(pieces))
+    def shift(t):return t+sum(e['duration'] for e in edits if t>=e['sourceTime'])
+    shifted=copy.deepcopy(response)
+    for field in ['alignment','normalized_alignment']:
+        if shifted.get(field):
+            for axis in ['character_start_times_seconds','character_end_times_seconds']:shifted[field][axis]=[shift(t) for t in shifted[field][axis]]
+    for segment in shifted.get('voice_segments',[]):
+        for axis in ['start_time_seconds','end_time_seconds']:segment[axis]=shift(segment[axis])
+    return shifted,duration+sum(e['duration'] for e in edits),timed,edits
 
 def request_json(endpoint,payload,key):
     req=urllib.request.Request('https://api.elevenlabs.io'+endpoint,data=json.dumps(payload).encode(),headers={'xi-api-key':key,'Content-Type':'application/json'})
@@ -150,9 +197,10 @@ def main():
     if not a.audio:
         audio.write_bytes(base64.b64decode(result['audio_base64'],validate=True))
     duration=float(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','default=nw=1:nk=1',str(audio)],text=True))
-    out=retime(episode,manifest,result,duration);asset='scene-dialogue';mime='audio/wav' if audio.suffix.lower()=='.wav' else 'audio/mpeg';data='data:'+mime+';base64,'+base64.b64encode(audio.read_bytes()).decode()
+    result,duration,audio,pause_edits=insert_silent_beats(episode,manifest,result,duration,audio,a.out)
+    out=retime(episode,manifest,result,duration);out['audioEdits']=pause_edits;asset='scene-dialogue';mime='audio/wav' if audio.suffix.lower()=='.wav' else 'audio/mpeg';data='data:'+mime+';base64,'+base64.b64encode(audio.read_bytes()).decode()
     out.update(dialogueAssetId=asset,dialogueName='Scene dialogue · '+a.model,voiceTrack=None,media={**episode.get('media',{}),asset:{'type':mime,'data':data}})
-    (a.out/'voiced.episode.json').write_text(json.dumps(out,indent=2));(a.out/'timing-report.json').write_text(json.dumps({'status':'validated','source':'forced-alignment' if result.get('forced_alignment') else 'native-character-alignment','beats':len(out['beats']),'audioDuration':duration},indent=2))
+    (a.out/'voiced.episode.json').write_text(json.dumps(out,indent=2));(a.out/'timing-report.json').write_text(json.dumps({'status':'validated','source':'forced-alignment' if result.get('forced_alignment') else 'native-character-alignment','beats':len(out['beats']),'audioDuration':duration,'insertedSilences':pause_edits},indent=2))
     print('Saved portable voiced episode with validated timing. Existing performance direction preserved.')
 
 if __name__=='__main__':
