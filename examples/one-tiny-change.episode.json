@@ -1,0 +1,396 @@
+{
+  "version": 1,
+  "title": "One tiny change",
+  "templateId": "working-room",
+  "duration": 53.94,
+  "endingHold": 1.2,
+  "audioStatus": "pending",
+  "look": {
+    "skin": "#ce9362",
+    "shirt": "#66734a",
+    "hair": "#30241f",
+    "mascot": "#d7815d"
+  },
+  "captionStyle": {
+    "mode": "chunks",
+    "hostColor": "#ffffff",
+    "creatureColor": "#ffc575",
+    "maxWords": 6,
+    "box": true
+  },
+  "layers": [],
+  "mix": {
+    "dialogue": 1,
+    "fire": 0,
+    "night": 0,
+    "music": 0,
+    "duck": true
+  },
+  "series": {
+    "name": "Small builds",
+    "episode": 1,
+    "motif": "The kettle is the operations team.",
+    "anchor": "A fictional developer overcomplicates a booking form. No customer result is claimed.",
+    "coverLine": "ONE TINY CHANGE",
+    "postCaption": "Ever made a form worse while trying to make it look professional?\n\nA fictional conversation about very real scope creep. Which field would you delete first?",
+    "funnel": "question",
+    "continuityPlant": "kettle-on-probation"
+  },
+  "beats": [
+    {
+      "id": 0,
+      "start": 0,
+      "end": 2.35,
+      "speaker": "human",
+      "text": "Claude, I broke bookings changing 1 button.",
+      "emotion": "thinking",
+      "action": "talk",
+      "role": "hook",
+      "camera": "Host",
+      "delivery": "curious",
+      "screen": {
+        "mode": "website",
+        "title": "BOOK A HAIRCUT",
+        "lines": [
+          "Please take a number.",
+          "You are number 47."
+        ],
+        "counter": 47,
+        "counterLabel": "QUEUE",
+        "banner": "ONE TINY CHANGE",
+        "typeOn": true
+      },
+      "prop": "cup",
+      "captionChunks": [
+        {
+          "text": "Claude, I broke bookings"
+        },
+        {
+          "text": "changing 1 button."
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "start": 2.43,
+      "end": 4.93,
+      "speaker": "creature",
+      "text": "Why does the website have a queue?",
+      "emotion": "neutral",
+      "action": "point",
+      "role": "twist",
+      "camera": "Claude",
+      "delivery": "dryly",
+      "listenerState": "sweat"
+    },
+    {
+      "id": 2,
+      "start": 5.01,
+      "end": 6.81,
+      "speaker": "human",
+      "text": "That's the loading screen.",
+      "emotion": "happy",
+      "action": "nod",
+      "role": "escalation",
+      "camera": "Host",
+      "delivery": "curious"
+    },
+    {
+      "id": 3,
+      "start": 6.89,
+      "end": 8.89,
+      "speaker": "creature",
+      "text": "It says, take a number.",
+      "emotion": "smug",
+      "action": "talk",
+      "role": "escalation",
+      "camera": "Claude",
+      "delivery": "dryly"
+    },
+    {
+      "id": 4,
+      "start": 8.97,
+      "end": 11.17,
+      "speaker": "human",
+      "text": "Makes the brand feel established.",
+      "emotion": "smug",
+      "action": "shrug",
+      "role": "escalation",
+      "camera": "Host",
+      "delivery": "curious"
+    },
+    {
+      "id": 5,
+      "start": 11.25,
+      "end": 13.6,
+      "speaker": "creature",
+      "text": "You run this from your kitchen.",
+      "emotion": "neutral",
+      "action": "talk",
+      "role": "escalation",
+      "camera": "Claude",
+      "delivery": "dryly"
+    },
+    {
+      "id": 6,
+      "start": 13.68,
+      "end": 16.18,
+      "speaker": "human",
+      "text": "The kettle is our operations team.",
+      "emotion": "happy",
+      "action": "point",
+      "role": "escalation",
+      "camera": "Host",
+      "delivery": "curious",
+      "propAction": "hold-up",
+      "prop": "cup"
+    },
+    {
+      "id": 7,
+      "start": 16.26,
+      "end": 18.16,
+      "speaker": "creature",
+      "text": "And the booking button?",
+      "emotion": "thinking",
+      "action": "talk",
+      "role": "escalation",
+      "camera": "Claude",
+      "delivery": "dryly"
+    },
+    {
+      "id": 8,
+      "start": 18.24,
+      "end": 20.24,
+      "speaker": "human",
+      "text": "I gave it more personality.",
+      "emotion": "happy",
+      "action": "type",
+      "role": "escalation",
+      "camera": "Host",
+      "delivery": "curious"
+    },
+    {
+      "id": 9,
+      "start": 20.32,
+      "end": 22.57,
+      "speaker": "creature",
+      "text": "It asks for a cover letter.",
+      "emotion": "neutral",
+      "action": "point",
+      "role": "escalation",
+      "camera": "Claude",
+      "delivery": "dryly",
+      "screen": {
+        "mode": "website",
+        "title": "BOOK A HAIRCUT",
+        "lines": [
+          "Name",
+          "Preferred time",
+          "Cover letter (required)",
+          "Reference check (required)"
+        ],
+        "banner": "APPLICATION INCOMPLETE",
+        "status": "error"
+      }
+    },
+    {
+      "id": 10,
+      "start": 22.65,
+      "end": 24.35,
+      "speaker": "human",
+      "text": "Only three sentences.",
+      "emotion": "smug",
+      "action": "talk",
+      "role": "escalation",
+      "camera": "Host",
+      "delivery": "curious"
+    },
+    {
+      "id": 11,
+      "start": 24.43,
+      "end": 25.93,
+      "speaker": "creature",
+      "text": "For a haircut?",
+      "emotion": "surprised",
+      "action": "talk",
+      "role": "escalation",
+      "camera": "Claude",
+      "delivery": "dryly",
+      "state": "dizzy"
+    },
+    {
+      "id": 12,
+      "start": 26.01,
+      "end": 28.26,
+      "speaker": "human",
+      "text": "We should attract serious customers.",
+      "emotion": "neutral",
+      "action": "talk",
+      "role": "escalation",
+      "camera": "Host",
+      "delivery": "curious"
+    },
+    {
+      "id": 13,
+      "start": 28.34,
+      "end": 30.49,
+      "speaker": "creature",
+      "text": "You added a reference check.",
+      "emotion": "smug",
+      "action": "point",
+      "role": "escalation",
+      "camera": "Claude",
+      "delivery": "dryly"
+    },
+    {
+      "id": 14,
+      "start": 30.57,
+      "end": 32.77,
+      "speaker": "human",
+      "text": "My old form looked amateur.",
+      "emotion": "sad",
+      "action": "lean",
+      "role": "escalation",
+      "camera": "Host",
+      "delivery": "curious",
+      "state": "powered-down"
+    },
+    {
+      "id": 15,
+      "start": 32.85,
+      "end": 34.65,
+      "speaker": "creature",
+      "text": "It let people book.",
+      "emotion": "neutral",
+      "action": "talk",
+      "role": "escalation",
+      "camera": "Claude",
+      "delivery": "dryly"
+    },
+    {
+      "id": 16,
+      "start": 34.73,
+      "end": 37.33,
+      "speaker": "human",
+      "text": "I wanted it to feel real.",
+      "emotion": "sad",
+      "action": "listen",
+      "role": "sincere",
+      "camera": "Host",
+      "delivery": "softly",
+      "cameraMotion": 0.1
+    },
+    {
+      "id": 17,
+      "start": 37.41,
+      "end": 39.96,
+      "speaker": "creature",
+      "text": "It was. Someone needed a slot.",
+      "emotion": "neutral",
+      "action": "nod",
+      "role": "escalation",
+      "camera": "Claude",
+      "delivery": "dryly"
+    },
+    {
+      "id": 18,
+      "start": 40.04,
+      "end": 42.54,
+      "speaker": "human",
+      "text": "So, name, time, phone number?",
+      "emotion": "thinking",
+      "action": "type",
+      "role": "escalation",
+      "camera": "Host",
+      "delivery": "curious",
+      "screen": {
+        "mode": "code",
+        "title": "ONE SMALL FORM",
+        "lines": [
+          "name",
+          "time",
+          "phone",
+          "book()"
+        ],
+        "typeOn": true,
+        "charsPerSecond": 10
+      }
+    },
+    {
+      "id": 19,
+      "start": 42.62,
+      "end": 44.72,
+      "speaker": "creature",
+      "text": "And a working button.",
+      "emotion": "happy",
+      "action": "nod",
+      "role": "escalation",
+      "camera": "Claude",
+      "delivery": "dryly",
+      "screen": {
+        "mode": "website",
+        "title": "BOOK A HAIRCUT",
+        "lines": [
+          "Name",
+          "Choose a time",
+          "Phone",
+          "[ Confirm booking ]"
+        ],
+        "status": "success",
+        "banner": "READY FOR PEOPLE",
+        "counter": 0,
+        "counterLabel": "UNNECESSARY QUESTIONS"
+      }
+    },
+    {
+      "id": 20,
+      "start": 44.8,
+      "end": 46.7,
+      "speaker": "human",
+      "text": "No personality questionnaire?",
+      "emotion": "thinking",
+      "action": "talk",
+      "role": "escalation",
+      "camera": "Host",
+      "delivery": "curious"
+    },
+    {
+      "id": 21,
+      "start": 46.78,
+      "end": 49.03,
+      "speaker": "creature",
+      "text": "Give that to the kettle.",
+      "emotion": "smug",
+      "action": "point",
+      "role": "payoff",
+      "camera": "Claude",
+      "delivery": "dryly"
+    },
+    {
+      "id": 22,
+      "start": 49.11,
+      "end": 51.01,
+      "speaker": "human",
+      "text": "Fine. One tiny change.",
+      "emotion": "happy",
+      "action": "shrug",
+      "role": "payoff",
+      "camera": "Host",
+      "delivery": "curious",
+      "prop": "cup",
+      "propAction": "hold-up"
+    },
+    {
+      "id": 23,
+      "start": 51.09,
+      "end": 52.74,
+      "speaker": "creature",
+      "text": "Unplug the kettle.",
+      "emotion": "smug",
+      "action": "talk",
+      "role": "button",
+      "camera": "Claude",
+      "delivery": "dryly"
+    }
+  ]
+}

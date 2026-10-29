@@ -46,6 +46,7 @@ def run(project,manifest,out,aliases,gap):
    words=[dict(text=w['text'],start=round(at+w['start']-lo/RATE,5),end=round(at+w['end']-lo/RATE,5)) for w in b['words']]
    begin=at if i==0 else words[0]['start'];finish=min(len(output)/RATE,words[-1]['end']+.08)
    if i+1<len(group['lines']):finish=min(finish,at+group['lines'][i+1]['words'][0]['start']-lo/RATE)
+   if b.get('captionChunks'):b['captionChunks']=[{'text':c['text']} for c in b['captionChunks']]
    timed.append({k:v for k,v in b.items() if not k.startswith('_')}|dict(start=round(begin,5),end=round(finish,5),words=words))
   edit.append(dict(speaker=speaker,lineIds=[b['id'] for b in group['lines']],sourceStart=lo/RATE,sourceEnd=hi/RATE,outputStart=at,outputEnd=len(output)/RATE));output.extend([0]*round(gap*RATE))
  duration=max(project.get('duration',0),math.ceil((len(output)/RATE+.2)*30)/30);output.extend([0]*max(0,round(duration*RATE)-len(output)))

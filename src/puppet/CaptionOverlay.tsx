@@ -1,0 +1,4 @@
+import {useLayoutEffect,useRef} from 'react';
+import type {Beat} from './types';
+import {paintCaptions,type CaptionStyle} from './Captions';
+export function CaptionOverlay({beat,time,style}:{beat?:Beat;time:number;style?:CaptionStyle}){const canvas=useRef<HTMLCanvasElement>(null);useLayoutEffect(()=>{const ctx=canvas.current?.getContext('2d');if(ctx){ctx.clearRect(0,0,1080,1920);if(beat){paintCaptions(ctx,beat,time,'Campfire Sans',style);let alive=true;void document.fonts.ready.then(()=>{if(alive){ctx.clearRect(0,0,1080,1920);paintCaptions(ctx,beat,time,'Campfire Sans',style);}});return()=>{alive=false;};}}},[beat,time,style]);return <canvas aria-label={beat?.text??'Captions'} ref={canvas} width={1080} height={1920} style={{position:'absolute',inset:0,width:'100%',height:'100%',pointerEvents:'none'}}/>;}

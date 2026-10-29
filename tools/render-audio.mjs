@@ -13,7 +13,7 @@ export async function prepareAudio(project,base,folder,{silent=false,dialogue}={
  const envelope=[];
  if(voice){const pcm=await command('ffmpeg',['-v','error','-i',voice,'-f','f32le','-ac','1','-ar',String(SAMPLE_RATE),'-'],{binary:true});const perFrame=SAMPLE_RATE/FPS;for(let frame=0;frame<Math.ceil(project.duration*FPS);frame++){let sum=0,n=0;for(let j=frame*perFrame;j<Math.min((frame+1)*perFrame,pcm.length/4);j++){const v=pcm.readFloatLE(j*4);sum+=v*v;n++;}envelope.push(n?Math.min(1,Math.sqrt(sum/n)*8):0);}}
  const {DEFAULT_MIX,defaultLayers}=await import('../dist/render-data.mjs');const mix={...DEFAULT_MIX,...project.mix};const layers=[];
- if(!silent)for(const layer of project.layers??defaultLayers(mix)){
+ if(!silent)for(const layer of project.layers??defaultLayers(mix,project.templateId)){
   if(!layer.enabled||!(layer.volume>0))continue;
   if(!['ambience','music','action'].includes(layer.kind)||!Number.isFinite(layer.volume)||layer.volume>1)throw Error('Invalid sound layer '+layer.id);
   let file;

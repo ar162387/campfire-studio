@@ -11,3 +11,13 @@ For a new body action, add the key to `ACTIONS`, implement a restrained determin
 For a different human or mascot, modify head/hair/clothes/silhouette inside the corresponding component while preserving the same props and controls. Current character positions are defined in these components, not solely in the background. Keep selectable rig identities `human`/`creature` stable even if display names change. Search Studio.tsx for user-facing Host/Claude labels when renaming the cast.
 
 Test close-ups, both profiles, the over-laptop view and a wide shot. Hair needs a back/sides silhouette, hands should not penetrate the laptop, and expressions should remain readable at phone size. Rendering style is low-poly geometry; no image/video model is required.
+
+## Extended direction channels (v2)
+
+`state` and `listenerState` are independent of emotion: `none`, `powered-down`, `blush`, `sweat`, `sick`, `hearts`, `dizzy`, `ghost`. Powered-down mutes eyes/mouth, desaturates and slumps. Effects come from frame time. Ghost geometry is generated from the current pose, so direct seeking and sequential export agree.
+
+`blocking`: `seated`, `standing`, `enter-left`, `enter-right`, `presenter`, `collapsed`, `crouch`, `profile`, `hands`. The last explicit position persists across turns; entrance progress belongs to its initiating beat and is not restarted by later dialogue. Automatic Host/Claude cameras account for standing/crouched/collapsed positions. Custom cameras are authored poses; inspect them after a position change.
+
+`prop`: `none`, `note`, `cup`, `phone`, `mushroom`; `propText` labels a note. The prop persists until the actor explicitly selects `none` or another prop. `propAction`: `none`, `hold-up`, `hand-over`, `bite`, `scan`. These are directed gestures: hand-over offers the prop; author a recipient's next beat with the same prop and release the giver explicitly. There is no physical collision/automatic ownership simulation. Bite reduces a prop after the bite phase; scan adds a beam. Keep limb contact believable in a close-up.
+
+`endingHold` holds the final directed pose and caption with the mouth closed after the final beat. Episode duration must include the desired hold; the editor's control extends the timeline. A state may be stronger than an emotion, so check face readability. `npm run gallery` renders all registered sets and the extended state sample for inspection.

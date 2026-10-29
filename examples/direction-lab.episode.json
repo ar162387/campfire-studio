@@ -1,0 +1,140 @@
+{
+  "version": 1,
+  "title": "Direction lab",
+  "templateId": "working-room",
+  "duration": 15.2,
+  "endingHold": 1.2,
+  "audioStatus": "pending",
+  "look": {
+    "skin": "#ce9362",
+    "shirt": "#66734a",
+    "hair": "#30241f",
+    "mascot": "#d7815d"
+  },
+  "captionStyle": {
+    "mode": "chunks",
+    "hostColor": "#ffffff",
+    "creatureColor": "#ffc575",
+    "maxWords": 6,
+    "box": true
+  },
+  "layers": [],
+  "mix": {
+    "dialogue": 1,
+    "fire": 0,
+    "night": 0,
+    "music": 0,
+    "duck": true
+  },
+  "series": {
+    "name": "Direction lab",
+    "episode": 1
+  },
+  "beats": [
+    {
+      "id": 0,
+      "start": 0,
+      "end": 2,
+      "speaker": "human",
+      "text": "Blush. One controlled performance.",
+      "emotion": "neutral",
+      "action": "talk",
+      "camera": "Host",
+      "state": "blush",
+      "prop": "note",
+      "propAction": "hold-up",
+      "propText": "ONE SMALL IDEA",
+      "blocking": "standing"
+    },
+    {
+      "id": 1,
+      "start": 2,
+      "end": 4,
+      "speaker": "creature",
+      "text": "Sweat. One controlled performance.",
+      "emotion": "neutral",
+      "action": "talk",
+      "camera": "Claude",
+      "state": "sweat",
+      "prop": "phone",
+      "propAction": "scan",
+      "propText": "ONE SMALL IDEA",
+      "blocking": "presenter"
+    },
+    {
+      "id": 2,
+      "start": 4,
+      "end": 6,
+      "speaker": "human",
+      "text": "Hearts. One controlled performance.",
+      "emotion": "neutral",
+      "action": "talk",
+      "camera": "Host",
+      "state": "hearts",
+      "prop": "cup",
+      "propAction": "hand-over",
+      "propText": "ONE SMALL IDEA",
+      "blocking": "profile"
+    },
+    {
+      "id": 3,
+      "start": 6,
+      "end": 8,
+      "speaker": "creature",
+      "text": "Sick. One controlled performance.",
+      "emotion": "neutral",
+      "action": "talk",
+      "camera": "Claude",
+      "state": "sick",
+      "prop": "mushroom",
+      "propAction": "bite",
+      "propText": "ONE SMALL IDEA",
+      "blocking": "crouch"
+    },
+    {
+      "id": 4,
+      "start": 8,
+      "end": 10,
+      "speaker": "human",
+      "text": "Dizzy. One controlled performance.",
+      "emotion": "neutral",
+      "action": "talk",
+      "camera": "Host",
+      "state": "dizzy",
+      "prop": "none",
+      "propAction": "none",
+      "propText": "ONE SMALL IDEA",
+      "blocking": "standing"
+    },
+    {
+      "id": 5,
+      "start": 10,
+      "end": 12,
+      "speaker": "creature",
+      "text": "Powered down. One controlled performance.",
+      "emotion": "neutral",
+      "action": "talk",
+      "camera": "Claude",
+      "state": "powered-down",
+      "prop": "none",
+      "propAction": "none",
+      "propText": "ONE SMALL IDEA",
+      "blocking": "seated"
+    },
+    {
+      "id": 6,
+      "start": 12,
+      "end": 14,
+      "speaker": "human",
+      "text": "Ghost. One controlled performance.",
+      "emotion": "neutral",
+      "action": "talk",
+      "camera": "Host",
+      "state": "ghost",
+      "prop": "none",
+      "propAction": "none",
+      "propText": "ONE SMALL IDEA",
+      "blocking": "standing"
+    }
+  ]
+}

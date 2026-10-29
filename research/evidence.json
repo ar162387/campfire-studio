@@ -1,0 +1,26 @@
+{
+  "studyDate": "2026-10-29",
+  "primaryCreativeBrief": {
+    "source": "Muse competitor playbook supplied by the user",
+    "method": "User reports seven subagents watched and listened to reels using Gemini, then examined captions and metadata.",
+    "coverage": {"creators": 6, "reels": 20},
+    "availableHere": "Distilled playbook; original per-creator AV reports were not attached.",
+    "use": "Adopted as the creative specification; no re-audit of its AV analysis claimed."
+  },
+  "creators": [
+    {"handle": "agentpoly", "source": "https://www.agentpolystudios.com/", "metric": "aggregate-views", "value": 5500000, "provenance": "creator-reported on first-party website", "perReelVerified": false},
+    {"handle": "agentmorphy", "source": "https://www.appmorphy.com/blog/how-i-make-ai-reels", "metric": "aggregate-views", "value": 4800000, "period": "11 days", "provenance": "creator-reported on first-party website; article also reports a largest reel passing one million", "perReelVerified": false},
+    {"handle": "base.learn", "metric": "likes", "value": 309000, "provenance": "Muse supplied AV study", "perReelVerified": false},
+    {"handle": "canwebuildthis", "provenance": "Muse supplied AV study", "perReelVerified": false},
+    {"handle": "agentcinder", "provenance": "Muse supplied AV study", "perReelVerified": false},
+    {"handle": "ashutoshwithclaude", "provenance": "Muse supplied AV study", "perReelVerified": false}
+  ],
+  "interpretation": "Million-view creator reports support investigating the format. They do not prove that a specific caption style or feature caused reach. Likes are not views. Outlier ratios need a reel's views and a comparable recent account median.",
+  "adoptedDefaults": {"captions": "short phrase chunks, Host white, mascot warm gold", "story": "cold open, early twist, escalating receipts, one sincere beat, planted callback, short button", "funnel": "post caption question for story mode", "cast": "consistent IDs, audition alternatives without silently replacing existing voices"},
+  "experiments": ["Chunked versus karaoke captions on matched content", "Speaker versus listener opening face", "In-world face cover versus series badge cover"],
+  "technicalSources": [
+    "https://elevenlabs.io/docs/api-reference/text-to-dialogue/convert-with-timestamps",
+    "https://elevenlabs.io/docs/api-reference/forced-alignment/create",
+    "https://github.com/elevenlabs/elevenlabs-python/issues/707"
+  ]
+}

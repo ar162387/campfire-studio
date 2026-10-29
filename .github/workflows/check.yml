@@ -27,3 +27,7 @@ jobs:
           npm run render -- examples/starter.episode.json --software --silent --talk-preview --seconds .2 --output output/ci-silent.mp4
           npm run render -- examples/starter.episode.json --software --silent --talk-preview --seconds .2 --output output/ci-silent.mp4
           node --input-type=module -e "import fs from 'node:fs'; const r=JSON.parse(fs.readFileSync('output/ci-silent.mp4.json')); if(r.reusedFrames!==6 || r.renderedFrames!==0) throw Error('Resume failed');"
+      - name: Render registered scenes and states
+        run: npm run gallery -- output/ci-gallery --software
+      - name: Prepare voice request without provider credits
+        run: python3 tools/voice-scene.py prepare examples/one-tiny-change.episode.json --model eleven_v4 --pronunciations examples/pronunciations.json --out output/ci-voices

@@ -10,12 +10,21 @@ export async function exists(file){try{await stat(file);return true;}catch{retur
 export function command(bin,args,{binary=false,maxBytes=128*1024*1024}={}){return new Promise((yes,no)=>{const child=spawn(bin,args,{stdio:['ignore','pipe','pipe']});let chunks=[],errors=[],size=0;child.stdout.on('data',b=>{size+=b.length;if(size>maxBytes){child.kill();no(Error('Command output exceeded limit'));}else chunks.push(b);});child.stderr.on('data',b=>{errors.push(b);if(errors.length>100)errors.shift();});child.on('error',no);child.on('close',code=>{if(code!==0)no(Error(`${bin} exited ${code}: ${Buffer.concat(errors).toString().slice(-3000)}`));else yes(binary?Buffer.concat(chunks):Buffer.concat(chunks).toString());});});}
 export function validateProject(p,models){
  if(p?.version!==1||!p.look||!Number.isFinite(p.duration)||p.duration<=0||!Array.isArray(p.beats)||!p.beats.length)throw Error('Expected a version-1 Campfire episode with look, duration and beats.');
+ if(models?.SCENE_TEMPLATES&&!models.SCENE_TEMPLATES[p.templateId??'campfire'])throw Error('Unknown scene template');
+ if(p.endingHold!==undefined&&(!Number.isFinite(p.endingHold)||p.endingHold<0||p.endingHold>3))throw Error('Invalid ending hold');
+ if(p.captionStyle&&(!['chunks','karaoke'].includes(p.captionStyle.mode)||p.captionStyle.maxWords!==undefined&&(!Number.isInteger(p.captionStyle.maxWords)||p.captionStyle.maxWords<1||p.captionStyle.maxWords>8)))throw Error('Invalid caption style');
+ if(models?.validCamera&&p.cameraPresets?.some(c=>!models.validCamera(c)))throw Error('Invalid saved camera');
  const ids=new Set();let end=0;
  for(const b of [...p.beats].sort((a,b)=>a.start-b.start)){
   if(!Number.isInteger(b.id)||ids.has(b.id)||!['human','creature'].includes(b.speaker)||typeof b.text!=='string'||!Number.isFinite(b.start)||!Number.isFinite(b.end)||b.start<0||b.end<=b.start||b.end>p.duration||b.start<end-.0001)throw Error(`Invalid/overlapping beat ${b.id}`);
   if(models&&(!models.ACTIONS.includes(b.action)||!models.EMOTIONS.includes(b.emotion)))throw Error(`Unknown action/emotion in beat ${b.id}`);
+  if(models){for(const [key,values] of [['state',models.BODY_STATES],['listenerState',models.BODY_STATES],['blocking',models.BLOCKING],['propAction',models.PROP_ACTIONS]])if(b[key]!==undefined&&values&&!values.includes(b[key]))throw Error('Unknown '+key+' in beat '+b.id);if(b.captionChunks)models.captionCards(b,p.captionStyle);}
+  if(b.screen&&(!['chat','code','website','terminal','history','messages','calendar','verification','whiteboard'].includes(b.screen.mode)||b.screen.lines?.some(x=>typeof x!=='string')))throw Error('Invalid screen event');
+  if(models?.CAMERA_POSES&&!models.CAMERA_POSES.some(c=>c.id===b.camera)&&!(models.SCENE_TEMPLATES[p.templateId??'campfire'].cameras??[]).some(c=>c.id===b.camera)&&!p.cameraPresets?.some(c=>c.id===b.camera&&c.templateId===(p.templateId??'campfire')))throw Error('Unknown or incorrectly scoped camera '+b.camera);
+  if(b.cameraMotion!==undefined&&(!Number.isFinite(b.cameraMotion)||b.cameraMotion<0||b.cameraMotion>.3))throw Error('Invalid camera push');
+  if(b.prop&&!['none','note','cup','phone','mushroom'].includes(b.prop))throw Error('Invalid prop');
   ids.add(b.id);end=b.end;
-  if(b.words?.some(w=>!Number.isFinite(w.start)||!Number.isFinite(w.end)||w.start<b.start-.001||w.end<w.start||w.end>b.end+.001))throw Error(`Invalid word timing in beat ${b.id}`);
+  if(b.words?.some((w,i)=>i>0&&w.start<b.words[i-1].end-.001||!Number.isFinite(w.start)||!Number.isFinite(w.end)||w.start<b.start-.001||w.end<w.start||w.end>b.end+.001))throw Error(`Invalid word timing in beat ${b.id}`);
  }
  return p;
 }
@@ -43,7 +52,7 @@ export async function startRenderer(dist,{software=false,browserPath}={}){
   // Recent Ubuntu AppArmor policies already authorise the installed stable Chrome.
   // Reuse that sandboxed browser rather than disabling host/browser protections.
   if(!executable&&process.platform==='linux'&&await exists('/opt/google/chrome/chrome'))executable='/opt/google/chrome/chrome';
-  executable??=puppeteer.executablePath();
+  executable??=await puppeteer.executablePath();
   await command(executable,['--version']);
   browser=await puppeteer.launch({headless:true,pipe:true,timeout:30000,protocolTimeout:120000,executablePath:executable,dumpio:process.env.CAMPFIRE_BROWSER_DEBUG==='1',args});
   const page=await browser.newPage();await page.setViewport({width:WIDTH,height:HEIGHT,deviceScaleFactor:1});const errors=[];page.on('pageerror',e=>errors.push(String(e)));

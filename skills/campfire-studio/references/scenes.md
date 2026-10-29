@@ -1,30 +1,29 @@
-# Sets and camera templates
+# Sets, working screens and cameras
 
-The shipped template is `campfire`. New settings extend this engine; they are not prebuilt scenes awaiting selection.
+The editor's Scene template picker selects eight registered sets: `campfire`, `working-room`, `after-hours`, `keypad`, `gauntlet`, `classroom`, `daylight`, `phone-world`. They reuse the same cast, timeline, speech and renderer. New settings extend `SceneTemplates.tsx`; never build a replacement video app.
 
-- `SceneTemplates.tsx`: registry of `{id,name,Set,cameras?}`.
-- `CampfireSet.tsx`: set geometry, lights, fire and trees.
-- `CampfireEnvironment.tsx`: instanced pebbles, grass, bushes, stars and ridges.
-- `World.tsx`: composes the selected set with the existing cast and camera rig.
-- `CameraRig.tsx`: six defaults, saved poses and OrbitControls.
+- `StudioSets.tsx`: office/after-hours, keypad terrain, verification wall, teaching board, park and phone monolith.
+- `CampfireSet.tsx` / `CampfireEnvironment.tsx`: campfire with instanced ground details, stars and sparks.
+- `Direction.ts`: persisted screen events and held-pose clock.
+- `World.tsx`: composition and framing adjustments for character position.
+- `CameraRig.tsx`: six defaults, template-scoped named poses and orbit controls.
 
-To add an office, café or another setting:
+## Screen events
 
-1. Create a set component accepting `{frame:number}`, using the current low-poly material/lighting style. Register it in `SCENE_TEMPLATES` with a stable ID. The set includes background, lights, ground and props; World adds cast and cameras.
-2. Design the set around the existing seated human and elevated mascot anchors (inspect Characters.tsx). Character repositioning requires updating the rig anchors, props and shot targets together. Avoid hidden geometry blocking faces or clipping the laptop.
-3. Optionally supply `cameras` to override default shot names for the template. A pose is `{id,name,templateId,position:[x,y,z],target:[x,y,z],fov}`. Template ID must match. FOV is 15–90; position and target must differ. Built-in shot names can be overridden; keep Wide/Host/Claude/etc available for existing beats.
-4. Set `project.templateId` to the registered ID in the exported episode. Studio currently does not have a template-picker UI; agents select through JSON. Do not imply it does. Custom camera controls reuse the current template ID.
-5. Test all six shots, custom orbit/zoom/pan, captions, recording and the character contacts with seats/props.
+Attach a `screen` object to a beat. It updates at the line's start and persists through silent gaps. Independent project `screenEvents:[{id,time,screen}]` are also supported; voice retiming requires reviewing these absolute events, so prefer beat-attached screen actions when generating dialogue.
 
-Example registry entry:
-
-```tsx
-import {OfficeSet} from './OfficeSet';
-// Add beside campfire in SCENE_TEMPLATES:
-office: {id:'office', name:'Office at dusk', Set:OfficeSet,
- cameras:[{id:'Wide',name:'Wide',templateId:'office',position:[3,3.2,10.5],target:[0,1.1,0],fov:37}]}
+```json
+{"mode":"terminal","title":"BUILD / LOCAL","lines":["Compiling...","One small change"],"typeOn":true,"charsPerSecond":22,"cutAt":21,"banner":"BUILD INTERRUPTED","status":"error","counter":1,"counterLabel":"ATTEMPTS","timestamp":"02:58 AM","cursor":[0.72,0.52]}
 ```
 
-Unknown template IDs currently fall back to campfire; validate spelling before presenting a new setting. Large repeated props should use instancing/memoized deterministic layouts. Fire flicker, drifting sparks and gentle environmental movement come from frame time. Keep foreground details away from faces/caption space; avoid large per-frame scene rebuilds.
+Modes: `chat`, `code`, `website`, `terminal`, `history`, `messages`, `calendar`, `verification`, `whiteboard`. Website has field/button rows, code/terminal has numbered or command-prefixed text, messages has alternating bubbles, calendar has date cells, verification has a 3×3 grid. `cells` and `selectedCell` customise verification. Screen content is drawn locally to a texture, never executed as HTML/code or sent to an external website. `cutAt` stops type-on at a character; the banner then appears. Counter, timestamp, status and cursor are independently editable in JSON; common controls are available on the selected-line director.
 
-Human users can save named poses via Custom camera: orbit, wheel/pinch to zoom, right-drag to pan, frame actor/both, name and Save. AI can author the same `cameraPresets` data. Saved camera lookup is scoped to the project's template.
+Use a `Screen` camera in the screen-based sets to make a receipt legible. Faces remain the default for dialogue; hold the screen only long enough to read it. Caption backdrops prevent text collisions. Campfire/daylight have no working screen; moving to these sets changes Screen beats to Wide in the picker.
+
+## Extend a setting
+
+Register `{id,name,Set,cameras?}`. Set receives `{frame,screen?,elapsed?}` and supplies background/lights/ground/props; World adds characters. Design around anchors in Characters.tsx. Moving the cast requires moving props, contacts and shot targets together. A scene should have foreground detail, cast/action plane and a distant layer; repeated objects and one luminous object provide continuity.
+
+Camera pose: `{id,name,templateId,position:[x,y,z],target:[x,y,z],fov}`. Keep default shot names available. FOV must be 15–90 and position/target must differ. Named custom poses are scoped to their template. Human: orbit, wheel/pinch zoom, right-drag pan, choose actor/both, name and save. AI: author the same JSON. Beat `cameraMotion:0–0.3` is a deterministic push towards the target over the line.
+
+Unknown template IDs are rejected by the offline exporter; check spelling before import. Test a wide shot, both close-ups, profiles, over-laptop, low angle and custom views, then native export. Memoize static geometry and dispose owned textures/materials. Do not copy another creator's assets or paid kit.

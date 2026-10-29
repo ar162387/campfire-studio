@@ -15,6 +15,8 @@ Read the checkout's `AGENTS.md`. Run `npm ci`, `npm run build`, then `npm start`
 
 ## Route the work
 
+- **Original stories, competitor findings, series continuity, covers or publishing packs:** read [story-system.md](references/story-system.md) and [prompt-vault.md](references/prompt-vault.md). Adopt the supplied AV research as a creative brief; keep measured and creator-reported metrics distinct.
+
 - **Exporting, headless rendering or remote-machine issues:** read [rendering.md](references/rendering.md). Use `npm run doctor` and `npm run render`; do not improvise tool-driven screenshots or real-time screen recording.
 - **Episode or timing:** read [episodes.md](references/episodes.md). Copy an existing exported project or `examples/starter.episode.json`, direct its beats and import the JSON. Preserve the user's current project with Export JSON first.
 - **Character, expression or action:** read [characters.md](references/characters.md). Keep the rig's independently controlled eyes, eyebrows, mouth, head and limbs. Add reusable controls to the existing performance model.
@@ -29,4 +31,4 @@ A timing edit moves animation/captions; it does not stretch speech. Regenerate o
 
 Background dressing belongs to a template. Character looks, expressions, template-scoped camera poses, sound mix and local imported media travel in exported episode JSON. Export before clearing browser storage or changing an existing production.
 
-Build/typecheck after code changes, test relevant behavior, then render a short native-quality preview before a full export. For remote/headless jobs use the deterministic offline exporter: native 1080×1920, 30 fps, resumable frame cache, offline audio and verified MP4. The interactive Record button still depends on real-time browser/device performance. Do not promise template-picker UI controls that have not been implemented.
+Build/typecheck after code changes, test relevant behavior, then render a short native-quality preview before a full export. For remote/headless jobs use the deterministic offline exporter: native 1080×1920, 30 fps, resumable frame cache, offline audio and verified MP4. The interactive Record button still depends on real-time browser/device performance. The template picker now includes eight sets. Live preview, recording and offline export share the same caption painter. Short phrase captions with speaker colours are the default; karaoke remains an experiment option.

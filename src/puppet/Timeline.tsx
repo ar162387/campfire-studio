@@ -7,8 +7,8 @@ export function retimeClip(beats:Beat[],id:number,start:number,end:number,durati
  if(!ripple){end=Math.min(end,next?.start??duration);start=Math.min(start,end-.1);}else if(end-start<length-.04){end=start+length;}
  const delta=end-old.end;
  const updated=beats.map(b=>{
-  if(b.id===id){const moved=Math.abs((start-old.start)-(end-old.end))<.04;return {...b,start,end,words:moved?b.words?.map(w=>({...w,start:w.start+start-old.start,end:w.end+start-old.start})):undefined};}
-  if(ripple&&b.start>=old.end){return {...b,start:b.start+delta,end:b.end+delta,words:b.words?.map(w=>({...w,start:w.start+delta,end:w.end+delta}))};}
+  if(b.id===id){const moved=Math.abs((start-old.start)-(end-old.end))<.04;return {...b,start,end,captionChunks:moved?b.captionChunks?.map(c=>({...c,start:c.start===undefined?undefined:c.start+start-old.start,end:c.end===undefined?undefined:c.end+start-old.start})):undefined,words:moved?b.words?.map(w=>({...w,start:w.start+start-old.start,end:w.end+start-old.start})):undefined};}
+  if(ripple&&b.start>=old.end){return {...b,start:b.start+delta,end:b.end+delta,captionChunks:b.captionChunks?.map(c=>({...c,start:c.start===undefined?undefined:c.start+delta,end:c.end===undefined?undefined:c.end+delta})),words:b.words?.map(w=>({...w,start:w.start+delta,end:w.end+delta}))};}
   return b;
  });
  return {beats:updated,duration:Math.max(3,ripple?duration+delta:duration,...updated.map(b=>b.end))};

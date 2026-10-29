@@ -1,6 +1,6 @@
 {
   "name": "campfire-studio",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "private": true,
   "description": "Reusable procedural 3D dialogue reel studio and portable agent skill",
   "license": "MIT",
@@ -14,7 +14,11 @@
     "typecheck": "tsc --noEmit",
     "test": "node tools/build-data.mjs && node --test tests/*.test.mjs",
     "doctor": "node tools/render.mjs --doctor",
-    "render": "node tools/render.mjs"
+    "render": "node tools/render.mjs",
+    "episode:check": "node tools/content-system.mjs check",
+    "pack": "node tools/package.mjs",
+    "gallery": "node tools/gallery.mjs",
+    "voice:prepare": "python3 tools/voice-scene.py prepare"
   },
   "dependencies": {
     "@fontsource/inter": "5.2.8",

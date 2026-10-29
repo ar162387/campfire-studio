@@ -24,3 +24,37 @@ Numbers/contractions may be transcribed differently. Correct transcription text 
 `SoundLayers.ts` describes ambience/music/action layers. `SoundMixer.ts` continuously mixes them with speech, fades and optional ducking. Only dialogue reaches the mouth analyser. Fire/night/music assets ship; keyboard taps are deterministic local synthesis. Upload a background audio layer in the UI, choose its kind, adjust volume and enable/remove it. An action layer is gated by an action key such as `type`; it must not fire for unrelated actions. Export JSON carries uploaded audio in its `media` object.
 
 For new generated sound, ask the chosen sound-effect tool for a subtle loop suited to the scene (no voices, no music unless wanted). Keep speech intelligible and audition the mix. No external music/speech generation is possible solely because the local browser was opened. Browser recording supports the existing mixer; it is not an automatic provider integration.
+
+## Ordered scene dialogue and alignment (v2)
+
+`tools/voice-scene.py` adds a scene-level Text to Dialogue path. It preserves input order and explicitly selects `model_id`. Discover currently available models and voices, audition alternatives, then lock cast IDs. Never silently change a user's chosen voice or model. The included Will/Roger IDs were discovered previously; another account must verify them. Model pricing is not hardcoded and no fixed per-reel cost is promised.
+
+```sh
+# Offline request preparation, no key or credits:
+python3 tools/voice-scene.py prepare episode.json --model eleven_v4 --out output/voice-request
+# Optional aliases JSON: {"vibecoderzz":"vibe coderz"}
+# Live discovery requires ELEVENLABS_API_KEY in the caller's environment:
+python3 tools/voice-scene.py discover episode.json --model eleven_v4 --out output/cast
+# Only after user authorization for chargeable generation:
+python3 tools/voice-scene.py generate episode.json --model eleven_v4 --out output/take-01 --spend-credits
+# Reuse a saved provider response, no provider call:
+python3 tools/voice-scene.py assemble episode.json --model eleven_v4 --response output/take-01/response.json --audio output/take-01/dialogue.mp3 --out output/aligned
+```
+
+Optional `--pronunciations aliases.json` applies spoken aliases without changing captions. Single display-token aliases may become several spoken words. Multiword phrase aliases requiring ambiguous token mapping fail explicitly. Captions must match aligned spoken text after the approved aliases; the script rejects mismatches instead of guessing.
+
+The provider currently limits a request to 2000 input characters. Split longer scenes at complete turns, retaining continuity and measured placement. Save every charged response/audio before timing checks. Requests are never automatically retried. Invalid, reset, missing, out-of-range or transcript-mismatched timestamps stop assembly. The known native-timing issue is why validation exists: [provider SDK issue](https://github.com/elevenlabs/elevenlabs-python/issues/707).
+
+If native alignment is unusable, keep the successful take and align that exact audio with its exact spoken transcript:
+
+```sh
+python3 tools/voice-scene.py align episode.json --model eleven_v4 --audio output/take-01/dialogue.mp3 --out output/realigned --spend-credits
+# If an alignment response is already saved, assemble it instead of calling again:
+python3 tools/voice-scene.py assemble episode.json --model eleven_v4 --response output/realigned/forced-response.json --audio output/take-01/dialogue.mp3 --out output/final
+```
+
+Official endpoints: [dialogue with timestamps](https://elevenlabs.io/docs/api-reference/text-to-dialogue/convert-with-timestamps), [forced alignment](https://elevenlabs.io/docs/api-reference/forced-alignment/create). Alignment is a provider call too; do not assume it is free. No automatic voice cloning.
+
+The output `voiced.episode.json` embeds audio and measured word times, preserving emotion/action/camera/prop/screen direction. Whole-scene generation follows natural speech timing; it cannot promise exact prewritten silent gap lengths. Use the existing turn assembler when deliberate pauses or source pickups need exact placement. Independent absolute screenEvents must be reviewed before retiming. Existing caption-card text is retained and stale card timestamps are cleared.
+
+Validation status: offline preparation, exact transcript/pronunciation mapping and corrupt alignment rejection are covered by fixtures. A live long-form dialogue/forced-alignment test requires the caller's key and credits. A connected single-voice media plugin does not necessarily expose these endpoints or share its credentials. Report live verification honestly rather than treating fixtures as a listening test. Generate a short approved audition, listen to it, then test the full scene before standardising a cast.

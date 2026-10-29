@@ -42,14 +42,16 @@ Example prompt:
 ## Included
 
 - Procedural human and mascot rigs, seven base moods, thirteen actions, custom expressions and live recoloring.
-- Campfire stage with stars, bushes, pebbles, firelight and moving embers.
+- Eight selectable stages: campfire, working-screen room, after-hours office, giant keypad, verification gauntlet, classroom, daylight park and phone world.
 - Six default camera views plus orbit/zoom/pan and named saved cameras.
 - Timeline scrubbing, clip selection, dragging, trimming and ripple editing linked to script cards.
-- Word-highlight captions, dialogue-driven mouth movement, atmosphere/music/action sound layers and adjustable ducking.
+- Clause captions with speaker colours by default, optional word highlighting, dialogue-driven mouth movement, atmosphere/music/action layers and ducking.
+- Independent body states, persistent blocking/props, screen type-on/interruption events, restrained camera pushes and final pose holds.
+- Story checks, a continuity ledger, nine writing prompts, honest research/experiment records and local publishing packs.
 - Local autosave, portable JSON with imported audio, browser recording targeting 1080×1920 at 30 fps.
 - Agent guides for extending characters, registering backgrounds, generating speech and assembling whole speaker turns without repeated words at cuts.
 
-New settings and character shapes are **code extensions using the same renderer**. The shipped scene is campfire; the editor does not currently have a template-picker UI. Timing edits move animation/captions, not the speech waveform. Interactive recording smoothness and MP4/WebM support depend on your browser/device; the offline exporter renders each frame independently.
+New settings and character shapes are **code extensions using the same renderer**. The editor exposes templates and selected-line direction. Timing edits move animation/captions, not the speech waveform. Interactive recording smoothness and MP4/WebM support depend on your browser/device; the offline exporter renders each frame independently.
 
 ## Reliable video export for agents (including remote/headless workers)
 
@@ -71,6 +73,20 @@ npm run render -- examples/performance-test.episode.json --silent --talk-preview
 
 See the [rendering guide](skills/campfire-studio/references/rendering.md) for setup, diagnostics, audio, resumability, storage and Linux prerequisites.
 
+![Eight reusable scene templates](docs/v2-scenes.jpg)
+
+## Research-informed production (v2)
+
+Muse’s supplied study examined six creators and twenty reels. The user confirms seven agents watched and listened before reviewing captions/metadata. The distilled findings guide the defaults; [evidence provenance](research/evidence.json) keeps creator reports separate from measurements. No reach guarantee is made.
+
+```sh
+npm run episode:check -- examples/one-tiny-change.episode.json
+npm run render -- examples/one-tiny-change.episode.json --silent --talk-preview --output output/pilot.mp4
+npm run pack -- examples/one-tiny-change.episode.json --out output/pilot-pack --video output/pilot.mp4 --silent
+```
+
+The original 24-line pilot is fictional and ships silent with estimated timing. Existing saved projects are preserved. The [production guide](skills/campfire-studio/references/story-system.md) covers original scripts, continuity, covers, caption experiments and publishing review. `npm run gallery` renders every set and the state sample for inspection; add `-- --cameras` to inspect all default views. See [implementation and verification](docs/v2-validation.md).
+
 ## Voice workflow
 
 ```sh
@@ -78,6 +94,14 @@ python3 tools/voice-directions.py examples/starter.episode.json --out output/voi
 # Generate the two takes with your provider and obtain measured word timestamps.
 python3 tools/assemble-episode.py episode.json voices/manifest.json --out output/final
 ```
+
+For ordered multi-voice scene requests with explicit models and validated alignment:
+
+```sh
+python3 tools/voice-scene.py prepare episode.json --model eleven_v4 --out output/request
+```
+
+Preparation is offline. Live generation/alignment requires the caller’s `ELEVENLABS_API_KEY` and an explicit `--spend-credits` flag. The chat plugin does not transfer its credentials. Saved takes are reused; timestamps must pass exact transcript and monotonic checks. Live long-form dialogue has not been verified through a single-voice connector. See the [full workflow](skills/campfire-studio/references/voices.md).
 
 Import the resulting `output/final/episode.json`. See [voice guidance](skills/campfire-studio/references/voices.md) for manifest format, pronunciation aliases and caption alignment. Neither script spends provider credits.
 

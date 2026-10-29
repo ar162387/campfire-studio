@@ -17,3 +17,8 @@ Timeline: centre drag moves a clip; edge handles trim it; ripple moves later sce
 Film Studio edits the selected beat. Character Lab rehearses a setup and needs Apply to selected line. `patchPerformance(project, ids, patch)` supports batch direction without rewriting a rig. Preview at cuts and gaps, scrub backwards and test recording with audio. Record uses the same caption painting and scene renderer as preview.
 
 Back up the active project before importing another. Public starter data is an example, not a reason to overwrite a user's live work. The browser keeps its own saved project independently of source changes.
+
+
+V2 extends beats with `state`, `listenerState`, `blocking`, `prop`, `propAction`, `propText`, `screen`, `cameraMotion`, `captionChunks` and `role`. Projects support `captionStyle`, `endingHold`, `screenEvents` and `series`. Read characters.md and scenes.md for exact enums, and story-system.md for narrative/continuity guidance. New projects open the original fictional pilot; older browser saves are not replaced. The minimal starter remains available for smoke tests.
+
+Caption chunks must exactly reproduce spoken text. Moving a clip retimes its measured words and explicit caption-card times; trimming clears stale timings. Regenerating/assembling speech clears explicit card times and derives them again from measured words. Deliberate pauses belong to the timing plan; scene-level natural speech is not an exact-duration synthesizer.

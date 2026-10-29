@@ -3,6 +3,7 @@ import {createRoot} from 'react-dom/client';
 import {Canvas,useThree} from '@react-three/fiber';
 import {CharacterWorld} from './World';
 import {direct,type Project} from './types';
+import {heldPerformanceFrame,screenAt,beatPhase} from './Direction';
 import {paintCaptions} from './Captions';
 import {SCENE_TEMPLATES} from './SceneTemplates';
 
@@ -17,8 +18,8 @@ function CommitFrame({request}:{request:Request}){
  useLayoutEffect(()=>{try{
   gl.render(scene,camera);gl.getContext().finish();
   context!.clearRect(0,0,1080,1920);context!.drawImage(gl.domElement,0,0,1080,1920);
-  const beat=direct(request.frame,request.project.beats,0).beat;
-  if(request.captions&&beat)paintCaptions(context!,beat,request.frame/30,'Campfire Sans');
+  const captionFrame=heldPerformanceFrame(request.frame,request.project),beat=direct(captionFrame,request.project.beats,0).beat;
+  if(request.captions&&beat)paintCaptions(context!,beat,captionFrame/30,'Campfire Sans',request.project.captionStyle);
   request.resolve();
  }catch(e){request.reject(e instanceof Error?e:Error(String(e)));}},[request,gl,scene,camera]);
  return null;
@@ -28,9 +29,11 @@ function App(){
  useLayoutEffect(()=>{submit=setRequest;return()=>{submit=undefined;};},[]);
  if(!request)return null;
  const amplitude=request.envelope[request.frame]??(request.talkPreview?.25+Math.abs(Math.sin(request.frame*.35))*.5:0);
- const perf=direct(request.frame,request.project.beats,amplitude,request.project.expressions);
+ const poseFrame=heldPerformanceFrame(request.frame,request.project);
+ const perf=direct(poseFrame,request.project.beats,request.frame===poseFrame?amplitude:0,request.project.expressions);
+ const screen=screenAt(request.project,request.frame/30);
  return <Canvas frameloop="never" dpr={1} shadows gl={{antialias:true,preserveDrawingBuffer:true,alpha:false}} camera={{near:.05,far:70}}>
-  <CharacterWorld frame={request.frame} host={perf.host} claude={perf.claude} camera={perf.camera} look={request.project.look} presets={request.project.cameraPresets} templateId={request.project.templateId}/>
+  <CharacterWorld frame={poseFrame} screen={screen.screen} screenElapsed={screen.elapsed} push={(perf.beat?.cameraMotion??0)*beatPhase(poseFrame,perf.beat)} host={perf.host} claude={perf.claude} camera={perf.camera} look={request.project.look} presets={request.project.cameraPresets} templateId={request.project.templateId}/>
   <CommitFrame request={request}/>
  </Canvas>;
 }
