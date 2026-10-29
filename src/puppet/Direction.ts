@@ -7,7 +7,7 @@ export const PROP_ACTIONS=['none','hold-up','hand-over','bite','scan'] as const;
 export type PropAction=typeof PROP_ACTIONS[number];
 export type PropKind='none'|'note'|'cup'|'phone'|'mushroom';
 export type ScreenMode='chat'|'code'|'website'|'terminal'|'history'|'messages'|'calendar'|'verification'|'whiteboard';
-export type ScreenCue={mode:ScreenMode;title?:string;lines?:string[];banner?:string;status?:'normal'|'error'|'success';counter?:number;counterLabel?:string;typeOn?:boolean;charsPerSecond?:number;cutAt?:number;cursor?:[number,number];cells?:string[];selectedCell?:number;timestamp?:string;fullFrame?:boolean;playback?:boolean;playbackDuration?:number};
+export type ScreenCue={mode:ScreenMode;title?:string;hero?:string;lines?:string[];banner?:string;status?:'normal'|'error'|'success';counter?:number;counterLabel?:string;typeOn?:boolean;charsPerSecond?:number;cutAt?:number;cursor?:[number,number];cells?:string[];selectedCell?:number;timestamp?:string;fullFrame?:boolean;playback?:boolean;playbackDuration?:number};
 export type ScreenEvent={id:string;time:number;screen:ScreenCue};
 export function screenAt(project:Project,time:number){
  const events=[...(project.screenEvents??[]),...project.beats.filter(b=>b.screen).map(b=>({id:'beat-'+b.id,time:b.start,screen:b.screen!}))].sort((a,b)=>a.time-b.time);
