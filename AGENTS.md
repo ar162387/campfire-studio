@@ -18,3 +18,6 @@ Preserve an active user's episode and uploaded media with Export JSON before rep
 A scene-template ID must be registered in source. The UI provides eight scene templates, custom cameras and selected-line direction controls. New stage layouts must update rig anchors/prop contacts/shot targets together when moving characters. Validate actual browser output after relevant tests; no full-video render is required for a documentation-only change.
 
 Agent exports: `npm run doctor -- episode.json`, short `npm run render -- episode.json --preview`, then final export. Native frame clock is fixed at 30 fps. Avoid per-frame agent tool calls and real-time recording on slow headless machines. Offline jobs have no dependency on a browser visible to the user.
+
+
+Credit discipline: routine tests and scene previews must use fixtures or saved audio, never fresh paid generation. The official SDK helper is `tools/voice-dialogue.mjs`; it runs with Node's `--env-file=.env.local` on the server/CLI only. Default generation cap is 500 input characters. `--spend-credits` and a larger cap require a deliberately authorized take, not a generic health check. Respect any user instruction to stop billable testing. Do not run the CLI's optional paid onboarding test after the actual dialogue workflow has already been validated.

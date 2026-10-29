@@ -1,0 +1,212 @@
+{
+  "version": 1,
+  "title": "Long dialogue and timing validation",
+  "templateId": "working-room",
+  "duration": 97,
+  "endingHold": 1.2,
+  "audioStatus": "pending",
+  "look": {
+    "skin": "#ce9362",
+    "shirt": "#66734a",
+    "hair": "#30241f",
+    "mascot": "#d7815d"
+  },
+  "captionStyle": {
+    "mode": "chunks",
+    "hostColor": "#ffffff",
+    "creatureColor": "#ffc575",
+    "maxWords": 6,
+    "box": true
+  },
+  "layers": [],
+  "mix": {
+    "dialogue": 1,
+    "fire": 0,
+    "night": 0,
+    "music": 0,
+    "duck": true
+  },
+  "series": {
+    "name": "Studio validation",
+    "episode": 1,
+    "anchor": "Synthetic engineering test; no client result claimed."
+  },
+  "beats": [
+    {
+      "id": 0,
+      "start": 0,
+      "end": 5.8,
+      "speaker": "human",
+      "text": "Claude, before we record anything, I want to check that our two voices sound like an actual conversation.",
+      "emotion": "thinking",
+      "action": "talk",
+      "camera": "Host",
+      "delivery": "curious"
+    },
+    {
+      "id": 1,
+      "start": 6,
+      "end": 11.8,
+      "speaker": "creature",
+      "text": "Good. Ask me a question, leave a little room for the answer, and resist the urge to explain everything.",
+      "emotion": "neutral",
+      "action": "talk",
+      "camera": "Claude",
+      "delivery": "confident"
+    },
+    {
+      "id": 2,
+      "start": 12,
+      "end": 17.8,
+      "speaker": "human",
+      "text": "I changed the booking page again. The button works, but now it looks like a very small emergency.",
+      "emotion": "surprised",
+      "action": "talk",
+      "camera": "Host",
+      "delivery": "nervous"
+    },
+    {
+      "id": 3,
+      "start": 18,
+      "end": 23.8,
+      "speaker": "creature",
+      "text": "That is progress. Yesterday it looked like a very large emergency with a newsletter attached to the bottom.",
+      "emotion": "smug",
+      "action": "talk",
+      "camera": "Claude",
+      "delivery": "amused"
+    },
+    {
+      "id": 4,
+      "start": 24,
+      "end": 29.8,
+      "speaker": "human",
+      "text": "I was excited about that newsletter. I even wrote a welcome message and chose a friendly little paper plane.",
+      "emotion": "happy",
+      "action": "talk",
+      "camera": "Host",
+      "delivery": "excited"
+    },
+    {
+      "id": 5,
+      "start": 30,
+      "end": 35.8,
+      "speaker": "creature",
+      "text": "The paper plane was lovely. It was also the only part of the page that knew where it was going.",
+      "emotion": "smug",
+      "action": "talk",
+      "camera": "Claude",
+      "delivery": "sarcastic"
+    },
+    {
+      "id": 6,
+      "start": 36,
+      "end": 41.8,
+      "speaker": "human",
+      "text": "Wait, did you actually keep the version before I changed it, or are we going to rebuild everything again?",
+      "emotion": "surprised",
+      "action": "talk",
+      "camera": "Host",
+      "delivery": "surprised"
+    },
+    {
+      "id": 7,
+      "start": 42,
+      "end": 47.8,
+      "speaker": "creature",
+      "text": "I kept it. I also kept your note that said, please stop me when I start redesigning the calendar.",
+      "emotion": "neutral",
+      "action": "talk",
+      "camera": "Claude",
+      "delivery": "softly"
+    },
+    {
+      "id": 8,
+      "start": 48,
+      "end": 53.8,
+      "speaker": "human",
+      "text": "I thought that note was a joke. Sometimes I change tiny things because the important thing feels harder to finish.",
+      "emotion": "sad",
+      "action": "talk",
+      "camera": "Host",
+      "delivery": "sad"
+    },
+    {
+      "id": 9,
+      "start": 54,
+      "end": 59.8,
+      "speaker": "creature",
+      "text": "I know. We can leave the tiny things alone for a minute. Tell me what the page needs to do.",
+      "emotion": "thinking",
+      "action": "talk",
+      "camera": "Claude",
+      "delivery": "thoughtful"
+    },
+    {
+      "id": 10,
+      "start": 60,
+      "end": 65.8,
+      "speaker": "human",
+      "text": "A person chooses a time, adds a name, and gets a clear answer. That is really the whole thing.",
+      "emotion": "neutral",
+      "action": "talk",
+      "camera": "Host",
+      "delivery": "natural"
+    },
+    {
+      "id": 11,
+      "start": 66,
+      "end": 71.8,
+      "speaker": "creature",
+      "text": "Then let us make that feel easy. The form does not need to impress somebody before it helps them.",
+      "emotion": "neutral",
+      "action": "talk",
+      "camera": "Claude",
+      "delivery": "confident"
+    },
+    {
+      "id": 12,
+      "start": 72,
+      "end": 77.8,
+      "speaker": "human",
+      "text": "Fine. But I am keeping one little animation. The cursor makes the room feel like somebody is actually working here.",
+      "emotion": "happy",
+      "action": "talk",
+      "camera": "Host",
+      "delivery": "playful"
+    },
+    {
+      "id": 13,
+      "start": 78,
+      "end": 83.8,
+      "speaker": "creature",
+      "text": "Keep the cursor. Keep the warm lamp. Keep the cup. We can have a personality without giving the button a biography.",
+      "emotion": "smug",
+      "action": "talk",
+      "camera": "Claude",
+      "delivery": "amused"
+    },
+    {
+      "id": 14,
+      "start": 84,
+      "end": 89.8,
+      "speaker": "human",
+      "text": "And when we say vibecoderzz, we mean vibe coderz. That name should sound natural instead of a spelling exercise.",
+      "emotion": "neutral",
+      "action": "talk",
+      "camera": "Host",
+      "delivery": "carefully"
+    },
+    {
+      "id": 15,
+      "start": 90,
+      "end": 95.8,
+      "speaker": "creature",
+      "text": "Vibe coderz. There. We have two voices, a working page, and a kettle that has survived another meeting.",
+      "emotion": "happy",
+      "action": "talk",
+      "camera": "Claude",
+      "delivery": "warmly"
+    }
+  ]
+}

@@ -12,11 +12,11 @@ The shipped creative defaults follow the supplied Muse AV study. This release ex
 | Writing | Nine prompts, story roles/checker, original pilot, continuity ledger | 24-line pilot passes structural checks; ledger rejects missing plants |
 | Research | Source/provenance records, view outliers only with medians | Likes/aggregate counts cannot become reel outlier ratios |
 | Experiments | Caption variants and rate calculations | Null handling, no automatic winner declaration |
-| Voices | Ordered explicit-model request, saved takes, exact transcript/timestamp checks, forced alignment path | Offline request/fixtures; live long-form provider test remains unverified without a caller key |
+| Voices | Ordered explicit-model request, saved takes, exact transcript/timestamp checks, forced alignment path | Offline request/fixtures; short sample and 100.8-second v4 dialogue validated through the official SDK |
 | Packaging | In-world cover, subtitles, post-caption draft, episode, review report | Local pilot pack; existing video must match its episode hash |
 | Export | Native 1080×1920, 30 fps, H.264, silent/audio mix, resumable frames | Existing audio/mix/resume tests plus actual silent pilot and software-render checks |
 
-The silent pilot uses estimated speech timing; the state sample uses synthetic mouth preview. Neither is a newly generated voice performance. Native timestamp validation catches a reset after 60 seconds in fixtures, but fixtures are not a live 90-second listening test. The current connected single-voice plugin does not expose the dialogue/alignment endpoints; the optional CLI requires ELEVENLABS_API_KEY and authorized provider credits.
+The original pilot still ships silent with estimated timing. V2.1 additionally validated a live 100.8-second, sixteen-turn v4 scene and rendered an eighteen-second excerpt with measured captions, dialogue-driven mouth movement and one audio track. Native timestamps and speaker segments were returned; the final non-spoken punctuation had 80 ms of padding beyond the audio. A bounded 120 ms trailing-padding tolerance handles that case without changing spoken times. Forced alignment of the saved take also passed. No new voice generation is needed to test scene changes. Credentials and generated audio remain local and ignored by Git.
 
 Body gestures are procedural, not physics simulation. Hand-over needs an explicit recipient/release beat. Automatic close-ups follow body placement; saved custom cameras require inspection after pose/layout changes. Informational movement and good dialogue matter more than adding motion to every beat.
 

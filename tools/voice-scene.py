@@ -36,8 +36,9 @@ def alignment_tokens(alignment,duration):
     chars=alignment.get('characters',[]);starts=alignment.get('character_start_times_seconds',[]);ends=alignment.get('character_end_times_seconds',[])
     if not chars or len(chars)!=len(starts) or len(chars)!=len(ends):raise ValueError('Alignment arrays are missing or mismatched.')
     out=[];tag=False;previous_start=previous_end=-1
-    for c,s,e in zip(chars,starts,ends):
-        if not isinstance(s,(int,float)) or not isinstance(e,(int,float)) or not (0<=s<=e<=duration+.05) or s+.001<previous_start or e+.001<previous_end:raise ValueError('Non-monotonic or out-of-range provider alignment. Keep the take; align this audio again.')
+    for index,(c,s,e) in enumerate(zip(chars,starts,ends)):
+        tail_padding=index==len(chars)-1 and not any(x.isalnum() for x in c) and isinstance(s,(int,float)) and isinstance(e,(int,float)) and 0<=s<=duration and s<=e<=duration+.12
+        if not isinstance(s,(int,float)) or not isinstance(e,(int,float)) or not (0<=s<=e<=duration+.05 or tail_padding) or s+.001<previous_start or e+.001<previous_end:raise ValueError('Non-monotonic or out-of-range provider alignment. Keep the take; align this audio again.')
         previous_start,previous_end=s,e
         for letter in c:
             if letter=='[':tag=True
@@ -66,7 +67,7 @@ def retime(episode,manifest,response,duration):
     seen=set();previous=-1
     for segment in segments:
         index=segment.get('dialogue_input_index');start=segment.get('start_time_seconds');end=segment.get('end_time_seconds')
-        if not isinstance(index,int) or index<0 or index>=len(manifest['mapping']) or segment.get('voice_id')!=manifest['request']['inputs'][index]['voice_id'] or not isinstance(start,(int,float)) or not isinstance(end,(int,float)) or not (0<=start<=end<=duration+.05) or start<previous-.001:raise ValueError('Invalid or misassigned provider voice segments.')
+        if not isinstance(index,int) or index<0 or index>=len(manifest['mapping']) or segment.get('voice_id')!=manifest['request']['inputs'][index]['voice_id'] or not isinstance(start,(int,float)) or not isinstance(end,(int,float)) or not (0<=start<=end<=duration+.05 or index==len(manifest['mapping'])-1 and 0<=start<=duration and start<=end<=duration+.12) or start<previous-.001:raise ValueError('Invalid or misassigned provider voice segments.')
         previous=start;seen.add(index)
     if segments and seen!=set(range(len(manifest['mapping']))):raise ValueError('Provider voice segments omit a dialogue input.')
     beats=[]
@@ -151,7 +152,7 @@ def main():
     duration=float(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','default=nw=1:nk=1',str(audio)],text=True))
     out=retime(episode,manifest,result,duration);asset='scene-dialogue';mime='audio/wav' if audio.suffix.lower()=='.wav' else 'audio/mpeg';data='data:'+mime+';base64,'+base64.b64encode(audio.read_bytes()).decode()
     out.update(dialogueAssetId=asset,dialogueName='Scene dialogue · '+a.model,voiceTrack=None,media={**episode.get('media',{}),asset:{'type':mime,'data':data}})
-    (a.out/'voiced.episode.json').write_text(json.dumps(out,indent=2));(a.out/'timing-report.json').write_text(json.dumps({'status':'validated','source':'provider-character-alignment','beats':len(out['beats']),'audioDuration':duration},indent=2))
+    (a.out/'voiced.episode.json').write_text(json.dumps(out,indent=2));(a.out/'timing-report.json').write_text(json.dumps({'status':'validated','source':'forced-alignment' if result.get('forced_alignment') else 'native-character-alignment','beats':len(out['beats']),'audioDuration':duration},indent=2))
     print('Saved portable voiced episode with validated timing. Existing performance direction preserved.')
 
 if __name__=='__main__':

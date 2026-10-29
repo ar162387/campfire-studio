@@ -57,4 +57,18 @@ Official endpoints: [dialogue with timestamps](https://elevenlabs.io/docs/api-re
 
 The output `voiced.episode.json` embeds audio and measured word times, preserving emotion/action/camera/prop/screen direction. Whole-scene generation follows natural speech timing; it cannot promise exact prewritten silent gap lengths. Use the existing turn assembler when deliberate pauses or source pickups need exact placement. Independent absolute screenEvents must be reviewed before retiming. Existing caption-card text is retained and stale card timestamps are cleared.
 
-Validation status: offline preparation, exact transcript/pronunciation mapping and corrupt alignment rejection are covered by fixtures. A live long-form dialogue/forced-alignment test requires the caller's key and credits. A connected single-voice media plugin does not necessarily expose these endpoints or share its credentials. Report live verification honestly rather than treating fixtures as a listening test. Generate a short approved audition, listen to it, then test the full scene before standardising a cast.
+## Live validation and credit discipline (v2.1)
+
+The official @elevenlabs/elevenlabs-js SDK is installed in the CLI layer. `npm run voice:dialogue` loads `.env.local` through Node's env-file option; the browser has no API key or SDK client. Onboard with the official CLI and authorize in the browser. Never paste a key into chat, print it, commit it, or put it in client-side code.
+
+Live testing on 29 October 2026 produced a short two-voice sample and a 100.8-second, sixteen-turn v4 scene. Native character alignment and input voice segments were returned. The long response placed its final punctuation/segment end 80 ms after the audio; the validator now tolerates up to 120 ms for that final non-spoken padding only, without moving spoken-word times. Out-of-range spoken characters, wrong voices, missing inputs and reset timing still fail. Forced alignment of the same saved take was also verified; no speech regeneration was needed. This test proves timing integration, not that every future generation will have identical delivery.
+
+```sh
+npm run voice:dialogue -- discover episode.json --out output/cast
+npm run voice:dialogue -- generate episode.json --out output/take --model eleven_v4 --spend-credits --max-characters 1600 --pronunciations examples/pronunciations.json
+npm run voice:dialogue -- assemble episode.json --out output/take --model eleven_v4 --pronunciations examples/pronunciations.json
+```
+
+The generation cap defaults to 500 input characters, including delivery tags. Raising it is deliberate and still requires authorization for the take. SDK retries are disabled. Existing response directories cannot be silently regenerated. `--align-fallback` must be selected explicitly and requires credit authorization; otherwise invalid timing stops with the saved take intact. Never run a paid onboarding sample or fresh audition merely to check that setup works. Use discovery, saved takes and offline fixtures for routine checks. Respect a user's credit reserve and any request to stop billable testing.
+
+`examples/voice-validation.episode.json` is an original engineering test, not a social post or customer case study. Its speech is not bundled in the public repository. The existing Python preparation/assembly path remains available without the SDK.

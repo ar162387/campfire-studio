@@ -1,6 +1,6 @@
 {
   "name": "campfire-studio",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
   "description": "Reusable procedural 3D dialogue reel studio and portable agent skill",
   "license": "MIT",
@@ -18,9 +18,11 @@
     "episode:check": "node tools/content-system.mjs check",
     "pack": "node tools/package.mjs",
     "gallery": "node tools/gallery.mjs",
-    "voice:prepare": "python3 tools/voice-scene.py prepare"
+    "voice:prepare": "python3 tools/voice-scene.py prepare",
+    "voice:dialogue": "node --env-file=.env.local tools/voice-dialogue.mjs"
   },
   "dependencies": {
+    "@elevenlabs/elevenlabs-js": "2.75.0",
     "@fontsource/inter": "5.2.8",
     "@react-three/fiber": "9.8.2",
     "puppeteer": "25.16.0",

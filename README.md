@@ -87,6 +87,12 @@ npm run pack -- examples/one-tiny-change.episode.json --out output/pilot-pack --
 
 The original 24-line pilot is fictional and ships silent with estimated timing. Existing saved projects are preserved. The [production guide](skills/campfire-studio/references/story-system.md) covers original scripts, continuity, covers, caption experiments and publishing review. `npm run gallery` renders every set and the state sample for inspection; add `-- --cameras` to inspect all default views. See [implementation and verification](docs/v2-validation.md).
 
+![Dressed reverse views](docs/reverse-views.jpg)
+
+## Detailed settings (v2.1)
+
+The seven newer sets now have coherent foreground, side and reverse-angle dressing, with quiet environmental motion. Office/classroom rooms have floors, rugs, shelves, plants, cables and clocks; the tech stages have circuit tiles, signal motion and surrounding props; the park has a full clearing, path, river ripples, pollen and butterflies. Camera-aware walls and tree visibility keep faces readable. Campfire retains its established design.
+
 ## Voice workflow
 
 ```sh
@@ -95,13 +101,25 @@ python3 tools/voice-directions.py examples/starter.episode.json --out output/voi
 python3 tools/assemble-episode.py episode.json voices/manifest.json --out output/final
 ```
 
-For ordered multi-voice scene requests with explicit models and validated alignment:
+The official SDK runs only in the local CLI, never in the browser bundle. Connect with `npx -y @elevenlabs/cli@latest onboard init`; follow browser authorization. The credential stays in ignored `.env.local`.
+
+```sh
+npm run voice:dialogue -- discover episode.json --out output/cast
+# Only for an explicitly authorized, credit-consuming production take:
+npm run voice:dialogue -- generate episode.json --out output/take --model eleven_v4 --spend-credits --max-characters 1600
+# Local reuse, no provider request:
+npm run voice:dialogue -- assemble episode.json --out output/take --model eleven_v4
+```
+
+The live helper defaults to a 500-character generation cap and never retries charged speech automatically. Increase the cap deliberately for an approved real episode. Routine tests, scene renders and assembly use no provider credits. `--align-fallback` opts into aligning a saved take; it requires explicit credit authorization too.
+
+For offline ordered scene-request preparation:
 
 ```sh
 python3 tools/voice-scene.py prepare episode.json --model eleven_v4 --out output/request
 ```
 
-Preparation is offline. Live generation/alignment requires the caller’s `ELEVENLABS_API_KEY` and an explicit `--spend-credits` flag. The chat plugin does not transfer its credentials. Saved takes are reused; timestamps must pass exact transcript and monotonic checks. Live long-form dialogue has not been verified through a single-voice connector. See the [full workflow](skills/campfire-studio/references/voices.md).
+Preparation is offline. Live generation/alignment requires the caller’s `ELEVENLABS_API_KEY` and an explicit `--spend-credits` flag. The chat plugin does not transfer its credentials. Saved takes are reused; timestamps must pass exact transcript and monotonic checks. Live v4 dialogue has now been tested through the official SDK: a short sample plus a 100.8-second, sixteen-turn scene with validated timing. Existing saved audio is reused during visual testing. See the [full workflow](skills/campfire-studio/references/voices.md).
 
 Import the resulting `output/final/episode.json`. See [voice guidance](skills/campfire-studio/references/voices.md) for manifest format, pronunciation aliases and caption alignment. Neither script spends provider credits.
 

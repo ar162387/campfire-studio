@@ -27,3 +27,10 @@ Register `{id,name,Set,cameras?}`. Set receives `{frame,screen?,elapsed?}` and s
 Camera pose: `{id,name,templateId,position:[x,y,z],target:[x,y,z],fov}`. Keep default shot names available. FOV must be 15–90 and position/target must differ. Named custom poses are scoped to their template. Human: orbit, wheel/pinch zoom, right-drag pan, choose actor/both, name and save. AI: author the same JSON. Beat `cameraMotion:0–0.3` is a deterministic push towards the target over the line.
 
 Unknown template IDs are rejected by the offline exporter; check spelling before import. Test a wide shot, both close-ups, profiles, over-laptop, low angle and custom views, then native export. Memoize static geometry and dispose owned textures/materials. Do not copy another creator's assets or paid kit.
+
+
+## Surrounding detail and motion (v2.1)
+
+`SetDressing.tsx` provides seven distinct dressing plans. Details wrap front, rear and both sides; the contact corridor remains clear. Office/classroom floors, rugs, shelves, plants, books and cable runs replace generic scattered rocks. The tech sets use tiled circuit platforms, terminals, hazard markings and light packets. The park uses seeded vegetation, a stump perch, a winding path and river ripples. Cup steam, lamp dust, rain, clock hands, a fan, teaching cards, scanner sweeps and notification motion are restrained, frame-driven accents.
+
+Room walls hide from cameras outside their shell so they cannot block the cast. Trees that sit between a camera and either face are hidden; they return when no longer obstructing the shot. The camera commits before environment visibility is evaluated. Static repeated detail is memoized/instanced; motion is deterministic so backward seeking and offline rendering agree. Verify reverse angles and low views, not only the hero view. The campfire set keeps its established dressing.
